@@ -1,0 +1,124 @@
+/* Reset basic styles for all elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Gray background, center everything on the screen */
+body {
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* The white box (Card style) */
+.main-card {
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); /* Soft shadow */
+    width: 800px;
+    max-width: 95%; /* Make it responsive for small screens */
+}
+
+/* Center the top text and icon */
+.card-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.card-header .icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+/* Container holding both forms next to each other */
+.forms-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Each form half (Login / Register) takes 45% of width */
+.form-section {
+    width: 45%; 
+}
+
+/* Section Titles */
+.form-section h3 {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-section h4 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #1a1a1a;
+}
+
+/* Text above inputs */
+label {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+    margin-top: 15px;
+}
+
+/* Input boxes styling */
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e1e5ea;
+    border-radius: 6px;
+    background-color: #f8faff; /* Light blueish background */
+    font-size: 14px;
+    outline: none;
+}
+
+/* Make border blue when typing inside */
+input:focus {
+    border-color: #2563eb;
+}
+
+/* Forgot password link style */
+.forgot-link {
+    display: block;
+    text-align: right;
+    font-size: 12px;
+    color: #666;
+    text-decoration: none;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+/* Blue Buttons */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+/* Darker blue on hover */
+button:hover {
+    background-color: #1d4ed8;
+}
+
+/* The vertical line between Login and Register */
+.divider {
+    width: 1px;
+    background-color: #e5e7eb;
+    margin: 0 20px;
+}
