@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum - Welcome</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="main-card">
+        
+        <div class="card-header">
+            <div class="icon">💬</div>
+            <h2>Welcome to the Forum</h2>
+        </div>
+
+        <div class="forms-container">
+            
+            <div class="form-section">
+                <h3>Login</h3>
+                <h4>Sign In</h4>
+                <form action="/login" method="POST">
+                    
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="👤 your.name@email.com" required>
+                    
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="🔒 ••••••••" required>
+                    
+                    <a href="#" class="forgot-link">Forgot Password?</a>
+                    
+                    <button type="submit">Sign In</button>
+                </form>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="form-section">
+                <h3>Register</h3>
+                <h4>Create Account</h4>
+                <form action="/register" method="POST">
+                    
+                    <label>Username</label>
+                    <input type="text" name="username" placeholder="👤 Jane Doe" required>
+                    
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="✉️ jane.doe@email.com" required>
+                    
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="🔒 ••••••••" required>
+                    
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
