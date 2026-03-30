@@ -44,7 +44,9 @@ func main() {
 	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
 		handlers.RegisterHandler(w, r, db)
 	})
-
+	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		//handlers.LoginHandler(w, r, db)
+	})
 	// 5. Start the server
 	fmt.Println("🚀 Server is running! Open your browser and go to: http://localhost:8080")
 	err = http.ListenAndServe(":8080", nil)
