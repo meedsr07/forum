@@ -16,13 +16,13 @@ CREATE TABLE IF NOT EXISTS posts (
 );
 
 -- LIKES
-CREATE TABLE IF NOT EXISTS likes (
+CREATE TABLE post_reactions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    post_id INTEGER,
+    user_id INTEGER NOT NULL,
+    post_id INTEGER NOT NULL,
+    reaction INTEGER NOT NULL,   
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
-
 -- SESSIONS
 CREATE TABLE IF NOT EXISTS sessions (
     token TEXT PRIMARY KEY,

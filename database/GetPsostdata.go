@@ -49,3 +49,31 @@ func GetMyPosts(DB *sql.DB, userID int) ([]models.Post, error) {
 
 	return UserPosts, nil
 }
+
+
+func GetLikedPosts(DB *sql.DB, userID int) ([]models.Post, error) {
+	var LikedPosts []models.Post
+
+	rows, err := DB.Query(`
+		SELECT posts.id, posts.user_id, posts.title, posts.content, posts.created_at
+		FROM posts
+		JOIN post_reactions ON posts.id = post_reactions.post_id
+		WHERE post_reactions.user_id = ?
+		AND post_reactions.reaction = 1
+	`, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var p models.Post
+		err := rows.Scan(&p.Id, &p.UserID, &p.Title, &p.Content, &p.Created_At)
+		if err != nil {
+			return nil, err
+		}
+		LikedPosts = append(LikedPosts, p)
+	}
+
+	return LikedPosts, nil
+}
