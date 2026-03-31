@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"database/sql"
 	"encoding/base64"
+	"log"
 	"net/http"
 	"time"
 
@@ -64,7 +65,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		// d. Credentials are correct! Create a Session Token
 		sessionToken := generateSessionToken()
 
-		// e. Create a cookie and attach the token
+		// e. Save the token in the 'sessions' table in our Database
+		_, err = db.Exec("INSERT INTO sessions (user_id, session_token, expires_at) VALUES (?, ?, ?)", dbID, sessionToken, expiresAt)
+		if err != nil {
+			log.Println("Error saving session to DB:", err)
+			http.Error(w, "Could not create session", http.StatusInternalServerError)
+			return
+		}
+		// f. Create a cookie and attach the token
 		cookie := http.Cookie{
 			Name:     "session_token",
 			Value:    sessionToken,
@@ -74,7 +82,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		}
 		http.SetCookie(w, &cookie)
 
-		// f. Redirect the user to the home page (Logged in!)
+		// g. Redirect the user to the home page (Logged in!)
 		http.Redirect(w, r, "/home_page", http.StatusSeeOther)
 		return
 	}
