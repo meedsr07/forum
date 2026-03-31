@@ -12,7 +12,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	cookie, err := r.Cookie("session_token")
 	if err == nil {
 		// 2. Delete the session from the database
-		db.Exec("DELETE FROM sessions WHERE session_token = ?", cookie.Value)
+		db.Exec("DELETE FROM user_sessions WHERE session_token = ?", cookie.Value)
 	}
 
 	// 3. Delete the cookie from the browser (by setting expiration time in the past)
@@ -41,7 +41,7 @@ func GetUserIDFromCookie(r *http.Request, db *sql.DB) (int, error) {
 	var expiresAt time.Time
 
 	// 2. Does this token exist in our database?
-	err = db.QueryRow("SELECT user_id, expires_at FROM sessions WHERE session_token = ?", cookie.Value).Scan(&userID, &expiresAt)
+	err = db.QueryRow("SELECT user_id, expires_at FROM user_sessions WHERE session_token = ?", cookie.Value).Scan(&userID, &expiresAt)
 	if err != nil {
 		return 0, fmt.Errorf("invalid session token")
 	}
