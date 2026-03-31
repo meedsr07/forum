@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 	"time"
 )
@@ -26,4 +27,31 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 
 	// 4. Send the user back to the homepage or login page
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+// GetUserIDFromCookie checks the cookie and returns the logged-in User's ID.
+func GetUserIDFromCookie(r *http.Request, db *sql.DB) (int, error) {
+	// 1. Does the user have a session cookie?
+	cookie, err := r.Cookie("session_token")
+	if err != nil {
+		return 0, fmt.Errorf("no cookie found")
+	}
+
+	var userID int
+	var expiresAt time.Time
+
+	// 2. Does this token exist in our database?
+	err = db.QueryRow("SELECT user_id, expires_at FROM sessions WHERE session_token = ?", cookie.Value).Scan(&userID, &expiresAt)
+	if err != nil {
+		return 0, fmt.Errorf("invalid session token")
+	}
+
+	// 3. Is the session expired?
+	if time.Now().After(expiresAt) {
+		// (Optional: You can delete it from DB here)
+		return 0, fmt.Errorf("session expired")
+	}
+
+	// 4. Success! Return the user's ID
+	return userID, nil
 }
