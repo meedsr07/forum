@@ -44,7 +44,7 @@ func main() {
 	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
 		handlers.RegisterHandler(w, r, db)
 	})
-	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/home_page", func(w http.ResponseWriter, r *http.Request) {
 		//handlers.LoginHandler(w, r, db)
 	})
 	// 5. Start the server
