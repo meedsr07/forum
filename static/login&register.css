@@ -264,6 +264,22 @@ button:active {
     text-decoration: underline;
 }
 
+/* Error Alert Bar */
+.error-alert {
+    background-color: #fef2f2; /* Light red background */
+    border: 1px solid #f87171; /* Red border */
+    color: #b91c1c; /* Dark red text */
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
 /* Response for small screens */
 @media (max-width: 480px) {
     body {
