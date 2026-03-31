@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 
@@ -30,14 +29,11 @@ func main() {
 			http.NotFound(w, r)
 			return
 		}
+		handlers.LoginHandler(w, r, db)
+	})
 
-		// Parse and show the login page
-		tmpl, err := template.ParseFiles("templates/login.html")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		tmpl.Execute(w, nil)
+	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		handlers.LoginHandler(w, r, db)
 	})
 
 	// 4. The Register Route: We send the 'db' variable to the handler
@@ -45,7 +41,7 @@ func main() {
 		handlers.RegisterHandler(w, r, db)
 	})
 	http.HandleFunc("/home_page", func(w http.ResponseWriter, r *http.Request) {
-		//handlers.LoginHandler(w, r, db)
+		handlers.HomeHandler(w, r)
 	})
 	// 5. Start the server
 	fmt.Println("🚀 Server is running! Open your browser and go to: http://localhost:8080")

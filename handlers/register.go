@@ -129,7 +129,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		}
 
 		// Success! Redirect to login page
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
