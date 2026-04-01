@@ -1,26 +1,24 @@
 package handlers
 
-import "database/sql"
+import (
+	"fmt"
+	"net/http"
 
-type sessions struct {
-	Token string
-	UserID int
-	Created_At string
-}
+	"forum/database"
+)
 
-func GetUserSession(DB *sql.DB) ([]sessions , error) {
-	var Usersesion []sessions
-	rows , err := DB.Query("SELECT token , user_id , created_at FROM  sessions ")
+func GetUserID(r *http.Request ) (int , error) {
+	cookie, err := r.Cookie("session_token")
 	if err != nil {
-		return nil , err 
+		return 0 , err
 	}
-	for rows.Next() {
-		var p sessions
-		err := rows.Scan(&p.Token , &p.UserID , &p.Created_At)
-		if err != nil {
-			return nil , err
-		}
-		Usersesion = append(Usersesion, p)
+	token := cookie.Value
+
+	var userID int
+	err = database.DB.QueryRow("SELECT user_id FROM user_sessions  WHERE session_token = ?", token).Scan(&userID)
+	if err != nil {
+		fmt.Println("error ")
+		return 0 , err 
 	}
-	return  Usersesion , nil 
+	return  userID , nil 
 }
