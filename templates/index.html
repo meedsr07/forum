@@ -4,539 +4,751 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --bg:        #f5f0e8;
-            --surface:   #ede8df;
-            --card:      #faf8f4;
-            --border:    #d8d0c0;
-            --accent:    #c84b2f;
-            --accent2:   #2f6ec8;
-            --text:      #1a1612;
-            --muted:     #8a7f72;
-            --tag-bg:    #e8e0d0;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Outfit', sans-serif;
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            line-height: 1.5;
         }
 
-        /* ── NAV ── */
-        nav {
+        /* Navigation */
+        .navbar {
+            background: #ffffff;
+            border-bottom: 1px solid #e9eef3;
+            padding: 0.875rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 3rem;
-            border-bottom: 1.5px solid var(--border);
-            background: var(--bg);
             position: sticky;
             top: 0;
             z-index: 100;
+            backdrop-filter: blur(8px);
+            background: rgba(255,255,255,0.98);
         }
 
         .logo {
-            font-family: 'Fraunces', serif;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: -1px;
-            color: var(--text);
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        .logo em {
-            font-style: italic;
-            color: var(--accent);
+        .nav-buttons {
+            display: flex;
+            gap: 0.875rem;
+            align-items: center;
         }
 
-        .nav-right {
+        .btn-login {
+            padding: 0.5rem 1.25rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #2563eb;
+            border: 1.5px solid #2563eb;
+            background: transparent;
+            transition: all 0.2s;
+        }
+
+        .btn-login:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-register {
+            padding: 0.5rem 1.25rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+        }
+
+        .btn-logout {
+            padding: 0.5rem 1.25rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #dc2626;
+            border: 1.5px solid #dc2626;
+            background: transparent;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .user-info {
             display: flex;
             align-items: center;
+            gap: 1rem;
+        }
+
+        .username {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 0.875rem;
+            background: #f1f5f9;
+            padding: 0.375rem 1rem;
+            border-radius: 2rem;
+        }
+
+        /* Layout - Sidebar + Main */
+        .forum-layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
             gap: 2rem;
         }
 
-        .nav-link {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--muted);
-            text-decoration: none;
-            transition: color 0.2s;
+        /* Sidebar - Categories */
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 80px;
+            height: fit-content;
         }
 
-        .nav-link:hover { color: var(--text); }
+        .sidebar-card {
+            background: white;
+            border-radius: 1.25rem;
+            border: 1px solid #eef2ff;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
 
-        .btn-primary {
-            background: var(--accent);
-            color: #fff;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.82rem;
+        .sidebar-header {
+            padding: 1.25rem 1.25rem 0.75rem;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .sidebar-header h3 {
+            font-size: 0.875rem;
             font-weight: 600;
-            padding: 0.55rem 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #5b6e8c;
+        }
+
+        .categories-list {
+            list-style: none;
+            padding: 0.5rem 0;
+        }
+
+        .categories-list li {
+            margin: 0;
+        }
+
+        .cat-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.75rem 1.25rem;
+            text-decoration: none;
+            color: #475569;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .cat-link:hover {
+            background: #f8fafc;
+            color: #2563eb;
+        }
+
+        .cat-link.active {
+            background: #eff6ff;
+            color: #2563eb;
+            border-left-color: #2563eb;
+        }
+
+        .cat-icon {
+            font-size: 1.125rem;
+            width: 28px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            border-radius: 1rem;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #eef2ff;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            background: #f8fafc;
             border: none;
+            font-size: 0.813rem;
+            font-weight: 500;
+            color: #5b6e8c;
             cursor: pointer;
             text-decoration: none;
+            display: inline-block;
             transition: all 0.2s;
-            clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
         }
 
-        .btn-primary:hover { background: #a83a20; }
+        .filter-btn:hover {
+            background: #eef2ff;
+            color: #2563eb;
+        }
 
-        /* ── HERO ── */
-        .hero {
-            border-bottom: 1.5px solid var(--border);
-            padding: 3rem 3rem 2.5rem;
+        .filter-btn.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .filter-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .results-count {
+            font-size: 0.813rem;
+            color: #5b6e8c;
+            background: #f8fafc;
+            padding: 0.375rem 1rem;
+            border-radius: 2rem;
+        }
+
+        /* Create Post Button */
+        .create-post-bar {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            gap: 2rem;
-        }
-
-        .hero-left h1 {
-            font-family: 'Fraunces', serif;
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 700;
-            line-height: 1;
-            letter-spacing: -2px;
-        }
-
-        .hero-left h1 em {
-            font-style: italic;
-            color: var(--accent);
-        }
-
-        .hero-left p {
-            margin-top: 0.8rem;
-            font-size: 0.9rem;
-            color: var(--muted);
-            max-width: 380px;
-            line-height: 1.6;
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 2.5rem;
-            flex-shrink: 0;
-        }
-
-        .stat { text-align: right; }
-
-        .stat-num {
-            font-family: 'Fraunces', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 0.72rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 0.2rem;
-            font-family: 'DM Mono', monospace;
-        }
-
-        /* ── LAYOUT ── */
-        .layout {
-            display: grid;
-            grid-template-columns: 220px 1fr;
-            min-height: calc(100vh - 130px);
-        }
-
-        /* ── SIDEBAR ── */
-        .sidebar {
-            border-right: 1.5px solid var(--border);
-            padding: 2rem 1.5rem;
-            position: sticky;
-            top: 57px;
-            height: calc(100vh - 57px);
-        }
-
-        .sidebar-label {
-            font-family: 'DM Mono', monospace;
-            font-size: 0.68rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--muted);
-            margin-bottom: 0.8rem;
-        }
-
-        .filter-list {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            margin-bottom: 2rem;
-        }
-
-        .filter-item {
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-            padding: 0.65rem 0.8rem;
-            text-decoration: none;
-            color: var(--muted);
-            font-size: 0.88rem;
-            font-weight: 500;
-            border: 1px solid transparent;
-            transition: all 0.15s;
-        }
-
-        .filter-item:hover {
-            color: var(--text);
-            background: var(--surface);
-        }
-
-        .filter-item.active {
-            color: var(--accent);
-            background: #f5e8e4;
-            border-color: #e8c8c0;
-            font-weight: 600;
-        }
-
-        .filter-icon { width: 20px; text-align: center; }
-
-        .divider {
-            height: 1.5px;
-            background: var(--border);
-            margin: 1.5rem 0;
-        }
-
-        /* ── MAIN ── */
-        .main { padding: 2rem 2.5rem; }
-
-        .main-topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: flex-end;
             margin-bottom: 1.5rem;
         }
 
-        .results-label {
-            font-family: 'DM Mono', monospace;
-            font-size: 0.72rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-new {
-            background: var(--text);
-            color: var(--bg);
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.82rem;
+        .btn-create {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            padding: 0.625rem 1.5rem;
+            border-radius: 2rem;
+            text-decoration: none;
             font-weight: 600;
-            padding: 0.55rem 1.3rem;
+            font-size: 0.875rem;
             border: none;
             cursor: pointer;
-            text-decoration: none;
             transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .btn-new:hover { background: #333; }
+        .btn-create:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+        }
 
-        /* ── POST CARDS ── */
+        /* Posts List */
         .posts-list {
             display: flex;
             flex-direction: column;
-            gap: 1px;
-            background: var(--border);
-            border: 1.5px solid var(--border);
+            gap: 1rem;
         }
 
         .post-card {
-            background: var(--card);
-            padding: 1.6rem;
-            text-decoration: none;
-            color: inherit;
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 1rem;
-            transition: background 0.15s;
-            position: relative;
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid #eef2ff;
+            transition: all 0.2s;
         }
 
-        .post-card::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 3px;
-            background: transparent;
-            transition: background 0.2s;
+        .post-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
         }
 
-        .post-card:hover { background: #f7f3ec; }
-        .post-card:hover::before { background: var(--accent); }
-
-        .post-top {
+        .post-header {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 0.5rem;
+            gap: 0.75rem;
             flex-wrap: wrap;
+            margin-bottom: 0.75rem;
         }
 
         .post-author {
-            font-family: 'DM Mono', monospace;
-            font-size: 0.72rem;
-            color: var(--accent2);
-            font-weight: 500;
+            font-weight: 600;
+            color: #2563eb;
+            font-size: 0.813rem;
+            background: #eff6ff;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
         }
 
         .post-date {
-            font-family: 'DM Mono', monospace;
-            font-size: 0.68rem;
-            color: var(--muted);
+            font-size: 0.688rem;
+            color: #94a3b8;
         }
 
-        .post-tag {
-            font-size: 0.65rem;
+        .post-category {
+            font-size: 0.688rem;
             font-weight: 600;
-            padding: 0.15rem 0.5rem;
-            background: var(--tag-bg);
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-family: 'DM Mono', monospace;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            background: #f1f5f9;
+            color: #475569;
         }
 
         .post-title {
-            font-family: 'Fraunces', serif;
-            font-size: 1.15rem;
-            font-weight: 700;
-            line-height: 1.3;
-            letter-spacing: -0.3px;
-            margin-bottom: 0.4rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+            line-height: 1.4;
         }
 
-        .post-preview {
-            font-size: 0.85rem;
-            color: var(--muted);
-            line-height: 1.6;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+        .post-content {
+            font-size: 0.875rem;
+            color: #475569;
+            margin-bottom: 1rem;
+            line-height: 1.5;
         }
 
-        .post-side {
+        .post-footer {
             display: flex;
-            flex-direction: column;
-            align-items: flex-end;
+            align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
             gap: 1rem;
-            flex-shrink: 0;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #f0f2f5;
         }
 
-        .vote-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.2rem;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 0.5rem 0.7rem;
-            min-width: 50px;
-        }
-
-        .vote-num {
-            font-family: 'Fraunces', serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--accent);
-            line-height: 1;
-        }
-
-        .vote-label {
-            font-family: 'DM Mono', monospace;
-            font-size: 0.6rem;
-            color: var(--muted);
-            text-transform: uppercase;
-        }
-
-        .post-stats {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .post-stat {
-            font-family: 'DM Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--muted);
+        .vote-section {
             display: flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.25rem;
         }
 
-        /* ── FOOTER ── */
-        footer {
-            border-top: 1.5px solid var(--border);
-            padding: 1.5rem 3rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-logo {
-            font-family: 'Fraunces', serif;
+        .vote-btn {
+            background: none;
+            border: none;
             font-size: 1rem;
-            font-style: italic;
-            color: var(--muted);
+            cursor: pointer;
+            padding: 0.375rem 0.625rem;
+            color: #64748b;
+            transition: all 0.2s;
+            border-radius: 2rem;
         }
 
-        .footer-text {
-            font-family: 'DM Mono', monospace;
-            font-size: 0.68rem;
-            color: var(--muted);
+        .vote-btn:hover {
+            background: #f1f5f9;
+            transform: scale(1.05);
+        }
+
+        .vote-count {
+            font-weight: 600;
+            font-size: 0.813rem;
+            color: #334155;
+            min-width: 28px;
+            text-align: center;
+        }
+
+        .comment-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comment-count {
+            font-size: 0.813rem;
+            color: #5b6e8c;
+        }
+
+        .comment-btn {
+            background: none;
+            border: none;
+            font-size: 0.813rem;
+            color: #2563eb;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 2rem;
+            transition: all 0.2s;
+        }
+
+        .comment-btn:hover {
+            background: #eff6ff;
+        }
+
+        /* Comments */
+        .comments-area {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f2f5;
+            display: none;
+        }
+
+        .comments-area.show {
+            display: block;
+        }
+
+        .comment {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f8fafc;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #2563eb;
+        }
+
+        .comment-text {
+            font-size: 0.813rem;
+            color: #334155;
+            margin-top: 0.25rem;
+        }
+
+        .comment-votes {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.375rem;
+        }
+
+        .add-comment {
+            margin-top: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .add-comment input {
+            flex: 1;
+            padding: 0.625rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 2rem;
+            font-size: 0.813rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .add-comment input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37,99,235,0.1);
+        }
+
+        .add-comment button {
+            padding: 0.5rem 1.25rem;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.813rem;
+            transition: all 0.2s;
+        }
+
+        .add-comment button:hover {
+            background: #1d4ed8;
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 1rem;
+            padding: 3rem;
+            text-align: center;
+            color: #64748b;
+            border: 1px solid #eef2ff;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal:target {
+            display: flex;
+        }
+
+        .modal-card {
+            background: white;
+            border-radius: 1.5rem;
+            max-width: 450px;
+            width: 90%;
+            padding: 2rem;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.2);
+        }
+
+        .modal-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            color: #0f172a;
+        }
+
+        .modal-card input,
+        .modal-card textarea,
+        .modal-card select {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            font-family: inherit;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .modal-card input:focus,
+        .modal-card textarea:focus,
+        .modal-card select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37,99,235,0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .modal-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .modal-btn.cancel {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .modal-btn.cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .modal-btn.submit {
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal-btn.submit:hover {
+            background: #1d4ed8;
+        }
+
+        .error-msg {
+            color: #dc2626;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            border-top: 1px solid #eef2ff;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .forum-layout {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .navbar {
+                padding: 0.75rem 1rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">f<em>o</em>rum</div>
-        <div class="nav-right">
-            <a href="/login" class="nav-link">Sign in</a>
-            <a href="/register" class="btn-primary">Join Forum</a>
-        </div>
-    </nav>
-
-    <div class="hero">
-        <div class="hero-left">
-            <h1>Where ideas<br><em>get discussed.</em></h1>
-            <p>A place to share posts, exchange thoughts, and engage with others on topics that matter.</p>
-        </div>
-        <div class="hero-stats">
-            <div class="stat">
-                <div class="stat-num">128</div>
-                <div class="stat-label">Posts</div>
-            </div>
-            <div class="stat">
-                <div class="stat-num">34</div>
-                <div class="stat-label">Members</div>
-            </div>
-        </div>
+<nav class="navbar">
+    <div class="logo">✦ Forum</div>
+    <div class="nav-buttons" id="navButtons">
+        <a href="#loginModal" class="btn-login">Sign In</a>
+        <a href="#registerModal" class="btn-register">Join Forum</a>
     </div>
-
-    <div class="layout">
-
-        <aside class="sidebar">
-            <div class="sidebar-label">Filter</div>
-            <div class="filter-list">
-                <a href="/?filter=all" class="filter-item active">
-                    <span class="filter-icon">◈</span> All Posts
-                </a>
-                <a href="/?filter=myposts" class="filter-item">
-                    <span class="filter-icon">◉</span> My Posts
-                </a>
-                <a href="/?filter=liked" class="filter-item">
-                    <span class="filter-icon">▲</span> Liked Posts
-                </a>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="sidebar-label">Categories</div>
-            <div class="filter-list">
-                <a href="/?category=tech" class="filter-item">
-                    <span class="filter-icon">⌨</span> Technology
-                </a>
-                <a href="/?category=general" class="filter-item">
-                    <span class="filter-icon">◎</span> General
-                </a>
-                <a href="/?category=help" class="filter-item">
-                    <span class="filter-icon">?</span> Help
-                </a>
-            </div>
-        </aside>
-
-        <main class="main">
-            <div class="main-topbar">
-                <span class="results-label">3 posts found</span>
-                <a href="/post/create" class="btn-new">+ New Post</a>
-            </div>
-
-            <div class="posts-list">
-
-                <a href="/post/1" class="post-card">
-                    <div class="post-main">
-                        <div class="post-top">
-                            <span class="post-author">@john_doe</span>
-                            <span class="post-date">Mar 31, 2026</span>
-                            <span class="post-tag">Technology</span>
-                        </div>
-                        <div class="post-title">My First Post on the Forum</div>
-                        <div class="post-preview">This is a preview of the post content. It gets cut off after two lines so the list stays clean and easy to scan for everyone.</div>
-                    </div>
-                    <div class="post-side">
-                        <div class="vote-box">
-                            <div class="vote-num">12</div>
-                            <div class="vote-label">likes</div>
-                        </div>
-                        <div class="post-stats">
-                            <span class="post-stat">💬 5</span>
-                            <span class="post-stat">▼ 2</span>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="/post/2" class="post-card">
-                    <div class="post-main">
-                        <div class="post-top">
-                            <span class="post-author">@sara_m</span>
-                            <span class="post-date">Mar 30, 2026</span>
-                            <span class="post-tag">General</span>
-                        </div>
-                        <div class="post-title">How to learn Go in 30 days</div>
-                        <div class="post-preview">Go is a great language for backend development. Here is my experience learning it from scratch with absolutely no prior experience at all.</div>
-                    </div>
-                    <div class="post-side">
-                        <div class="vote-box">
-                            <div class="vote-num">34</div>
-                            <div class="vote-label">likes</div>
-                        </div>
-                        <div class="post-stats">
-                            <span class="post-stat">💬 18</span>
-                            <span class="post-stat">▼ 1</span>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="/post/3" class="post-card">
-                    <div class="post-main">
-                        <div class="post-top">
-                            <span class="post-author">@alex_k</span>
-                            <span class="post-date">Mar 29, 2026</span>
-                            <span class="post-tag">Help</span>
-                        </div>
-                        <div class="post-title">SQLite vs PostgreSQL — which one should I use?</div>
-                        <div class="post-preview">Both are great databases but they serve very different use cases. Let me break down exactly when to use each one based on my experience.</div>
-                    </div>
-                    <div class="post-side">
-                        <div class="vote-box">
-                            <div class="vote-num">8</div>
-                            <div class="vote-label">likes</div>
-                        </div>
-                        <div class="post-stats">
-                            <span class="post-stat">💬 7</span>
-                            <span class="post-stat">▼ 3</span>
-                        </div>
-                    </div>
-                </a>
-
-            </div>
-        </main>
-
+    <div class="user-info" id="userInfo" style="display: none;">
+        <span class="username" id="usernameDisplay"></span>
+        <a href="#" id="logoutBtn" class="btn-logout">Logout</a>
     </div>
+</nav>
 
-    <footer>
-        <div class="footer-logo">forum</div>
-        <div class="footer-text">built with Go + SQLite</div>
-    </footer>
+<div class="forum-layout">
+    <!-- Sidebar with Categories -->
+    <aside class="sidebar">
+        <div class="sidebar-card">
+            <div class="sidebar-header">
+                <h3>📂 Categories</h3>
+            </div>
+            <ul class="categories-list">
+                <li>
+                    <a href="#" data-cat="all" class="cat-link active" id="sidebarCatAll">
+                        <span class="cat-icon">🗂️</span>
+                        <span>All Topics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-cat="Technology" class="cat-link" id="sidebarCatTech">
+                        <span class="cat-icon">💻</span>
+                        <span>Technology</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-cat="General" class="cat-link" id="sidebarCatGeneral">
+                        <span class="cat-icon">💬</span>
+                        <span>General</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-cat="Help" class="cat-link" id="sidebarCatHelp">
+                        <span class="cat-icon">🆘</span>
+                        <span>Help & Support</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
 
-</body>
-</html>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="filter-bar">
+            <div class="filter-group">
+                <a href="#" data-filter="all" class="filter-btn active" id="filterAll">📋 All Posts</a>
+                <a href="#" data-filter="my" class="filter-btn" id="filterMy">👤 My Posts</a>
+                <a href="#" data-filter="liked" class="filter-btn" id="filterLiked">❤️ Liked Posts</a>
+            </div>
+            <div class="results-count" id="resultsCount">0 posts</div>
+        </div>
+
+        <div class="create-post-bar">
+            <a href="#createPostModal" class="btn-create" id="createPostBtn">+ New Post</a>
+        </div>
+
+        <div class="posts-list" id="postsList"></div>
+    </main>
+</div>
+
+<footer>
+    <p>Forum • built with Go + SQLite • open discussion</p>
+</footer>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+    <div class="modal-card">
+        <h3>Welcome back</h3>
+        <form id="loginForm">
+            <input type="email" id="loginEmail" placeholder="Email address" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <div id="loginError" class="error-msg"></div>
+            <div class="modal-buttons">
+                <a href="#" class="modal-btn cancel">Cancel</a>
+                <button type="submit" class="modal-btn submit">Sign In</button>
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.75rem; text-align: center;">New here? <a href="#registerModal" style="color: #2563eb;">Create account</a></p>
+        </form>
+    </div>
+</div>
+
+<!-- Register Modal -->
+<div id="registerModal" class="modal">
+    <div class="modal-card">
+        <h3>Join the community</h3>
+        <form id="registerForm">
+            <input type="text" id="regUsername" placeholder="Username" required>
+            <input type="email" id="regEmail" placeholder="Email" required>
+            <input type="password" id="regPassword" placeholder="Password" required>
+            <div id="registerError" class="error-msg"></div>
+            <div class="modal-buttons">
+                <a href="#" class="modal-btn cancel">Cancel</a>
+                <button type="submit" class="modal-btn submit">Register</button>
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.75rem; text-align: center;">Already have an account? <a href="#loginModal" style="color: #2563eb;">Sign In</a></p>
+        </form>
+    </div>
+</div>
+
+<!-- Create Post Modal -->
+<div id="createPostModal" class="modal">
+    <div class="modal-card">
+        <h3>Create new post</h3>
+        <form id="createPostForm">
+            <input type="text" id="postTitle" placeholder="Post title" required>
+            <select id="postCategory">
+                <option value="Technology">💻 Technology</option>
+                <option value="General">💬 General</option>
+                <option value="Help">🆘 Help & Support</option>
+            </select>
+            <textarea id="postContent" rows="4" placeholder="Share your thoughts..." required></textarea>
+            <div id="postError" class="error-msg"></div>
+            <div class="modal-buttons">
+                <a href="#" class="modal-btn cancel">Cancel</a>
+                <button type="submit" class="modal-btn submit">Publish</button>
+            </div>
+        </form>
+    </div>
+</div>
