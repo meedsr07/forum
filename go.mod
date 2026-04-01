@@ -2,4 +2,7 @@ module forum
 
 go 1.24.5
 
-require github.com/mattn/go-sqlite3 v1.14.37 // indirect
+require (
+	github.com/mattn/go-sqlite3 v1.14.37
+	golang.org/x/crypto v0.49.0
+)
