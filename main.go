@@ -41,7 +41,7 @@ func main() {
 		handlers.RegisterHandler(w, r, db)
 	})
 	http.HandleFunc("/home_page", func(w http.ResponseWriter, r *http.Request) {
-		handlers.HomeHandler(w, r)
+		handlers.HomeHandler(w, r, db)
 	})
 	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
 		handlers.LogoutHandler(w, r, db)
