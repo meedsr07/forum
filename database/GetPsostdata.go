@@ -8,7 +8,7 @@ import (
 
 func Getallpost(DB *sql.DB) ([]models.Post, error) {
 	var AllPost []models.Post
-
+	// asking the database to get data from the posts table
 	rows, err := DB.Query("SELECT id, user_id, title, content, created_at FROM posts")
 	if err != nil {
 		return nil, err

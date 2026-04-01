@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"forum/database"
+	"forum/handlers"
 )
 
 func main() {
@@ -20,10 +21,15 @@ func main() {
 	// 	return
 	// }
 	// fmt.Println(UserPosts)
-	likedPost , err :=  database.GetLikedPosts(database.DB , 1)
+	// likedPost , err :=  database.GetLikedPosts(database.DB , 1)
+	// if err != nil {
+	// 	fmt.Println("error in geting liked postes")
+	// 	return
+	// }
+	// fmt.Println(likedPost)
+	usersesion , err := handlers.GetUserSession(database.DB)
 	if err != nil {
-		fmt.Println("error in geting liked postes")
 		return
 	}
-	fmt.Println(likedPost)
+	fmt.Println(usersesion)
 }
