@@ -14,7 +14,7 @@ var DB *sql.DB
 func InitializeDB() {
 	var err error
 	// open a connection betwen go and database
-	DB, err = sql.Open("sqlite3", "./forum.db")
+	DB , err = sql.Open("sqlite3", "./forum.db")
 	if err != nil {
 		log.Fatal(err)
 	}
