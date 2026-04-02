@@ -12,16 +12,13 @@ import (
 )
 
 var (
-	usernameRegex = regexp.MustCompile(`^[a-z]+_[a-z0-9]+$`)
+	usernameRegex = regexp.MustCompile(`^[a-z]+( [a-z0-9]+)?$`)
 	emailRegex    = regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
 )
 
 var tmpl *template.Template
 
-// 2. The init() function runs ONLY ONCE when the server starts
 func init() {
-	// Parse all HTML files in the "templates" folder and save them in "tmpl"
-	// template.Must() will crash the server immediately if there is a typo in HTML files
 	tmpl = template.Must(template.ParseGlob("templates/*.html"))
 }
 func RegisterHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {

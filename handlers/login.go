@@ -83,7 +83,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		http.SetCookie(w, &cookie)
 
 		// g. Redirect the user to the home page (Logged in!)
-		http.Redirect(w, r, "/home_page", http.StatusSeeOther)
+		http.Redirect(w, r, "/homepage", http.StatusSeeOther)
 		return
 	}
 }

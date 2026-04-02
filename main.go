@@ -29,7 +29,7 @@ func main() {
 			http.NotFound(w, r)
 			return
 		}
-		handlers.LoginHandler(w, r, db)
+		handlers.HomeHandler(w, r, db)
 	})
 
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
@@ -40,7 +40,7 @@ func main() {
 	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
 		handlers.RegisterHandler(w, r, db)
 	})
-	http.HandleFunc("/home_page", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/homepage", func(w http.ResponseWriter, r *http.Request) {
 		handlers.HomeHandler(w, r, db)
 	})
 	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
