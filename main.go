@@ -1,27 +1,29 @@
 package main
 
 import (
+	"fmt"
+	"forum/database"
+	"forum/handlers"
+	"forum/models"
 	"log"
 	"net/http"
-
-	"forum/database"
 )
 
 func main() {
-	// Init DB + create all tables
-	fmt.Println("star")
+	http.HandleFunc("/", handlers.HomePage)
+	http.HandleFunc("/Post/CreatePost", models.CreateNewPost)
+	http.HandleFunc("/login", handlers.Login)
+	http.HandleFunc("/static/", handlers.StaticHandlers)
 	db, err := database.InitDB("forum.db")
 	if err != nil {
 		log.Fatal("could not init db:", err)
 	}
+
 	defer db.Close()
-		fmt.Println("end")
+	fmt.Println("server is start in http://localhost:8080")
 
-	// Populate with test data (remove in production)
-	if err := database.SeedDB(db); err != nil {
-		log.Fatal("could not seed db:", err)
+	err = http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Fatal(err)
 	}
-
-	log.Println("Forum running at http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
 }

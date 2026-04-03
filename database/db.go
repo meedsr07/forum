@@ -8,6 +8,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+var DB *sql.DB
+
 // ─────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────
@@ -17,13 +19,13 @@ import (
 //
 //	db, err := database.InitDB("forum.db")
 func InitDB(filepath string) (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", filepath)
+	DB, err := sql.Open("sqlite3", filepath)
 	if err != nil {
 		return nil, fmt.Errorf("open db: %w", err)
 	}
 
 	// Enable foreign key enforcement (SQLite disables it by default)
-	if _, err = db.Exec("PRAGMA foreign_keys = ON"); err != nil {
+	if _, err = DB.Exec("PRAGMA foreign_keys = ON"); err != nil {
 		return nil, fmt.Errorf("enable foreign keys: %w", err)
 	}
 
@@ -32,9 +34,9 @@ func InitDB(filepath string) (*sql.DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("read schema: %w", err)
 	}
-	if _, err = db.Exec(string(schema)); err != nil {
+	if _, err = DB.Exec(string(schema)); err != nil {
 		return nil, fmt.Errorf("run schema: %w", err)
 	}
 
-	return db, nil
+	return DB, nil
 }

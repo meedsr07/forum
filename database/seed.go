@@ -149,3 +149,4 @@ func SeedDB(db *sql.DB) error {
 
 	return nil
 }
+
