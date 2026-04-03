@@ -39,6 +39,26 @@ body {
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease;
+    overflow-y: auto;
+}
+
+/* Sidebar Close Button (Mobile Only) */
+.sidebar-close {
+    display: none;
+    position: absolute;
+    top: 1.5rem;
+    right: 1.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: var(--transition);
+}
+.sidebar-close:hover {
+    background: #f1f5f9;
+    color: var(--text-main);
 }
 
 .logo { 
@@ -330,6 +350,7 @@ section { margin-bottom: 3.5rem; }
     .menu-toggle { display: flex; }
     .sidebar { transform: translateX(-100%); width: 280px; }
     .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
+    .sidebar-close { display: flex; align-items: center; justify-content: center; }
     .main { margin-left: 0; }
     
     .nav-links { display: none; } /* On tablet, use sidebar links */
