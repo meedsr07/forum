@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="static/filter.css">
     <link rel="stylesheet" href="static/comments.css">
     <link rel="stylesheet" href="static/categories.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"/>
 </head>
 <body>
 
@@ -78,8 +79,36 @@
             <a href="#createPostModal" class="btn-create" id="createPostBtn">+ New Post</a>
         </div>
 
-        <div class="posts-list" id="postsList"></div>
+        <div class="posts-list" id="postsList">
+            <a class="post-card" href="/Post?id_Post=969">
+                <h1 class="post-title">Title</h1>
+                <div class="post-header">
+                    <div class="author-info" >
+                        <p class="post-author">ana m9awed 3lokom kamlin </p>
+                        <p class="post-date "> 09/09/3965 00:00</p>
+                    </div>
+                    <div class="post-category">lahwa dwa o nik vitamin</div>
+                    <div class="post-vote">
+                        <div class="dislike vote-btn">
+                        <i class="fa-regular fa-thumbs-down"></i>
+                        <!-- <i class="fa-solid fa-thumbs-down"></i> -->
+                        <span class="vote-count">2</span>
+                    </div>
+                    <div class="like vote-btn ">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                        <!-- <i class="fa-solid fa-thumbs-up"></i> -->
+                        <span class="vote-count " >2</span>
+                    </div>
+                    <div class="vote-btn">
+                        <i class="fa-regular fa-comment"></i>
+                        <span class="vote-count">2</span>
+                    </div>
+                    </div>
+                </div>
+            </a>
+        </div>
     </main>
+    
 </div>
 
 <footer>

@@ -10,7 +10,16 @@
             color: #0f172a;
             line-height: 1.5;
         }
-        
+         footer {
+            background-color: blanchedalmond;
+            text-align: center;
+            padding: 2rem;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            border-top: 1px solid #eef2ff;
+            height: 60px;        
+        }
+
 
         /* Modal */
         .modal {
@@ -109,15 +118,7 @@
             margin-top: 0.25rem;
         }
 
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: #94a3b8;
-            font-size: 0.75rem;
-            border-top: 1px solid #eef2ff;
-            margin-top: 2rem;
-        }
-
+       
         @media (max-width: 768px) {
             .forum-layout {
                 flex-direction: column;
