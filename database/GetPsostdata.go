@@ -18,7 +18,7 @@ func Getallpost(DB *sql.DB) ([]models.Post, error) {
 	for rows.Next() {
 		// keep going until no more rows
 		var p models.Post
-		err := rows.Scan(&p.Id, &p.UserID, &p.Title, &p.Content , &p.Created_At)
+		err := rows.Scan(&p.ID, &p.UserID, &p.Title, &p.Content , &p.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -40,7 +40,7 @@ func GetMyPosts(DB *sql.DB, userID int) ([]models.Post, error) {
 
 	for rows.Next() {
 		var p models.Post
-		err := rows.Scan(&p.Id, &p.UserID, &p.Title, &p.Content, &p.Created_At)
+		err := rows.Scan(&p.ID, &p.UserID, &p.Title, &p.Content, &p.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -68,7 +68,7 @@ func GetLikedPosts(DB *sql.DB, userID int) ([]models.Post, error) {
 
 	for rows.Next() {
 		var p models.Post
-		err := rows.Scan(&p.Id, &p.UserID, &p.Title, &p.Content, &p.Created_At)
+		err := rows.Scan(&p.ID, &p.UserID, &p.Title, &p.Content, &p.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
