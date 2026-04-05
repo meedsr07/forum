@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/Global.css">
+    <link rel="stylesheet" href="static/main.css">
+    <link rel="stylesheet" href="static/navbar.css">
+    <link rel="stylesheet" href="static/post.css">
+    <link rel="stylesheet" href="static/filter.css">
+    <link rel="stylesheet" href="static/comments.css">
+    <link rel="stylesheet" href="static/categories.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">✦ Forum</div>
+    <div class="nav-buttons" id="navButtons">
+        <a href="#loginModal" class="btn-login">Sign In</a>
+        <a href="#registerModal" class="btn-register">Join Forum</a>
+    </div>
+    <div class="user-info" id="userInfo" style="display: none;">
+        <span class="username" id="usernameDisplay"></span>
+        <a href="#" id="logoutBtn" class="btn-logout">Logout</a>
+    </div>
+</nav>
+
+<div class="forum-layout">
+    <!-- Sidebar with Categories -->
+    <aside class="sidebar">
+        <div class="sidebar-card">
+            <div class="sidebar-header">
+                <h3>📂 Categories</h3>
+            </div>
+            <ul class="categories-list">
+                <li>
+                    <a href="#" data-cat="all" class="cat-link active" id="sidebarCatAll">
+                        <span class="cat-icon">🗂️</span>
+                        <span>All Topics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-cat="Technology" class="cat-link" id="sidebarCatTech">
+                        <span class="cat-icon">💻</span>
+                        <span>Technology</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-cat="General" class="cat-link" id="sidebarCatGeneral">
+                        <span class="cat-icon">💬</span>
+                        <span>General</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-cat="Help" class="cat-link" id="sidebarCatHelp">
+                        <span class="cat-icon">🆘</span>
+                        <span>Help & Support</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="filter-bar">
+            <div class="filter-group">
+                <a href="/?filter=all" class="filter-btn active">📋 All Posts</a>
+                <a href="/?filter=myposts" class="filter-btn">👤 My Posts</a>
+                <a href="/?filter=liked" class="filter-btn">❤️ Liked Posts</a>
+            </div>
+            <div class="results-count" id="resultsCount">0 posts</div>
+        </div>
+
+        <div class="create-post-bar">
+            <a href="#createPostModal" class="btn-create" id="createPostBtn">+ New Post</a>
+        </div>
+        <div class="posts-list">
+        {{range .}}
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="avatar">{{slice .Username 0 1}}</div>
+                    <div class="post-author-info">
+                        <span class="post-username">@{{.Username}}</span>
+                        <span class="post-date">{{.CreatedAt}}</span>
+                    </div>
+                </div>
+                <div class="post-body">
+                    <h2 class="post-title">{{.Title}}</h2>
+                    <p class="post-content">{{.Content}}</p>
+                </div>
+            </div>
+        {{end}}
+        {{if eq (len .) 0}}
+            <div class="empty">No posts found.</div>
+        {{end}}
+        </div>
+
+    </main>
+    
+</div>
+
+
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+    <div class="modal-card">
+        <h3>Welcome back</h3>
+        <form id="loginForm">
+            <input type="email" id="loginEmail" placeholder="Email address" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <div id="loginError" class="error-msg"></div>
+            <div class="modal-buttons">
+                <a href="#" class="modal-btn cancel">Cancel</a>
+                <button type="submit" class="modal-btn submit">Sign In</button>
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.75rem; text-align: center;">New here? <a href="#registerModal" style="color: #2563eb;">Create account</a></p>
+        </form>
+    </div>
+</div>
+
+<!-- Register Modal -->
+<div id="registerModal" class="modal">
+    <div class="modal-card">
+        <h3>Join the community</h3>
+        <form id="registerForm">
+            <input type="text" id="regUsername" placeholder="Username" required>
+            <input type="email" id="regEmail" placeholder="Email" required>
+            <input type="password" id="regPassword" placeholder="Password" required>
+            <div id="registerError" class="error-msg"></div>
+            <div class="modal-buttons">
+                <a href="#" class="modal-btn cancel">Cancel</a>
+                <button type="submit" class="modal-btn submit">Register</button>
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.75rem; text-align: center;">Already have an account? <a href="#loginModal" style="color: #2563eb;">Sign In</a></p>
+        </form>
+    </div>
+</div>
+
+<!-- Create Post Modal -->
+<div id="createPostModal" class="modal">
+    <div class="modal-card">
+        <h3>Create new post</h3>
+        
+        <form action="/Post/CreatePost" method="post">
+    <input
+        type="text"
+        id="postTitle"
+        name="title"
+        placeholder="Post title"
+        required
+    >
+
+    <select id="postCategory" name="category">
+        <option value="Technology">💻 Technology</option>
+        <option value="General">💬 General</option>
+        <option value="Help">🆘 Help & Support</option>
+    </select>
+
+    <textarea
+        id="postContent"
+        name="content"
+        rows="4"
+        placeholder="Share your thoughts..."
+        required
+    ></textarea>
+
+    <div id="postError" class="error-msg"></div>
+
+    <div class="modal-buttons">
+        <a href="#" class="modal-btn cancel">Cancel</a>
+        <button type="submit" class="modal-btn submit">Publish</button>
+    </div>
+    </form>
+    </div>
+</div>

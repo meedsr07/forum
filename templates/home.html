@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 { margin-bottom: 20px; }
+
+        /* FILTER BUTTONS */
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .filters a {
+            padding: 8px 20px;
+            background: #fff;
+            border: 1px solid #ccc;
+            text-decoration: none;
+            color: #333;
+            border-radius: 4px;
+        }
+
+        .filters a:hover {
+            background: #e0e0e0;
+        }
+
+        .filters a.active {
+            background: #c84b2f;
+            color: #fff;
+            border-color: #c84b2f;
+        }
+
+        /* POST CARD */
+        .post-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .post-card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .post-card p {
+            color: #555;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .post-meta {
+            font-size: 0.78rem;
+            color: #999;
+        }
+
+        /* EMPTY STATE */
+        .empty {
+            text-align: center;
+            padding: 60px;
+            color: #aaa;
+            background: #fff;
+            border: 1px dashed #ddd;
+            border-radius: 6px;
+        }
+
+        /* NAV */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            padding: 8px 16px;
+            background: #333;
+            color: #fff;
+            border-radius: 4px;
+        }
+    .post-author {
+    font-size: 0.85rem;
+    color: #2563eb;
+    font-weight: 600;
+    margin-bottom: 6px;
+    }
+
+    .post-card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <h1>Forum</h1>
+        <a href="/post/create">+ New Post</a>
+    </nav>
+
+    <!-- FILTER BUTTONS -->
+    <div class="filters">
+        <a href="/?filter=all" class="active">All Posts</a>
+        <a href="/?filter=myposts">My Posts</a>
+        <a href="/?filter=liked">Liked Posts</a>
+    </div>
+
+    <!-- POSTS — Go Template -->
+    {{range .}}
+        <div class="post-card">
+    
+             <div class="post-author">
+            @{{.Username}}
+        </div>
+
+        <h2>{{.Title}}</h2>
+
+        <p>{{.Content}}</p>
+
+        <div class="post-meta">
+            {{.CreatedAt}}
+        </div>
+
+        </div>
+    {{end}}
+
+    <!-- EMPTY STATE — shown when no posts -->
+    {{if not .}}
+    <div class="empty">
+        No posts found.
+    </div>
+    {{end}}
+
+</body>
+</html>
