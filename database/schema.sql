@@ -48,6 +48,8 @@ CREATE TABLE IF NOT EXISTS likes (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (post_id) REFERENCES posts(id),
     FOREIGN KEY (comment_id) REFERENCES comments(id)
+    UNIQUE(user_id, post_id),
+    UNIQUE(user_id, comment_id)
 );
        ------session table-------
 CREATE TABLE IF NOT EXISTS user_sessions (
