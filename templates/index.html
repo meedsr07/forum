@@ -5,624 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-            color: #0f172a;
-            line-height: 1.5;
-        }
-
-        /* Navigation */
-        .navbar {
-            background: #ffffff;
-            border-bottom: 1px solid #e9eef3;
-            padding: 0.875rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(8px);
-            background: rgba(255,255,255,0.98);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #2563eb, #4f46e5);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 0.875rem;
-            align-items: center;
-        }
-
-        .btn-login {
-            padding: 0.5rem 1.25rem;
-            border-radius: 2rem;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.875rem;
-            color: #2563eb;
-            border: 1.5px solid #2563eb;
-            background: transparent;
-            transition: all 0.2s;
-        }
-
-        .btn-login:hover {
-            background: #2563eb;
-            color: white;
-        }
-
-        .btn-register {
-            padding: 0.5rem 1.25rem;
-            border-radius: 2rem;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.875rem;
-            background: linear-gradient(135deg, #2563eb, #4f46e5);
-            color: white;
-            border: none;
-            transition: all 0.2s;
-        }
-
-        .btn-register:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
-        }
-
-        .btn-logout {
-            padding: 0.5rem 1.25rem;
-            border-radius: 2rem;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.875rem;
-            color: #dc2626;
-            border: 1.5px solid #dc2626;
-            background: transparent;
-            transition: all 0.2s;
-        }
-
-        .btn-logout:hover {
-            background: #dc2626;
-            color: white;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .username {
-            font-weight: 600;
-            color: #1f2937;
-            font-size: 0.875rem;
-            background: #f1f5f9;
-            padding: 0.375rem 1rem;
-            border-radius: 2rem;
-        }
-
-        /* Layout - Sidebar + Main */
-        .forum-layout {
-            display: flex;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-            gap: 2rem;
-        }
-
-        /* Sidebar - Categories */
-        .sidebar {
-            width: 280px;
-            flex-shrink: 0;
-            position: sticky;
-            top: 80px;
-            height: fit-content;
-        }
-
-        .sidebar-card {
-            background: white;
-            border-radius: 1.25rem;
-            border: 1px solid #eef2ff;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-        }
-
-        .sidebar-header {
-            padding: 1.25rem 1.25rem 0.75rem;
-            border-bottom: 1px solid #f0f2f5;
-        }
-
-        .sidebar-header h3 {
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #5b6e8c;
-        }
-
-        .categories-list {
-            list-style: none;
-            padding: 0.5rem 0;
-        }
-
-        .categories-list li {
-            margin: 0;
-        }
-
-        .cat-link {
-            display: flex;
-            align-items: center;
-            gap: 0.875rem;
-            padding: 0.75rem 1.25rem;
-            text-decoration: none;
-            color: #475569;
-            font-weight: 500;
-            font-size: 0.875rem;
-            transition: all 0.2s;
-            border-left: 3px solid transparent;
-        }
-
-        .cat-link:hover {
-            background: #f8fafc;
-            color: #2563eb;
-        }
-
-        .cat-link.active {
-            background: #eff6ff;
-            color: #2563eb;
-            border-left-color: #2563eb;
-        }
-
-        .cat-icon {
-            font-size: 1.125rem;
-            width: 28px;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            min-width: 0;
-        }
-
-        /* Filter Bar */
-        .filter-bar {
-            background: white;
-            border-radius: 1rem;
-            padding: 0.75rem 1.25rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid #eef2ff;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .filter-btn {
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            background: #f8fafc;
-            border: none;
-            font-size: 0.813rem;
-            font-weight: 500;
-            color: #5b6e8c;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.2s;
-        }
-
-        .filter-btn:hover {
-            background: #eef2ff;
-            color: #2563eb;
-        }
-
-        .filter-btn.active {
-            background: #2563eb;
-            color: white;
-        }
-
-        .filter-btn.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .results-count {
-            font-size: 0.813rem;
-            color: #5b6e8c;
-            background: #f8fafc;
-            padding: 0.375rem 1rem;
-            border-radius: 2rem;
-        }
-
-        /* Create Post Button */
-        .create-post-bar {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 1.5rem;
-        }
-
-        .btn-create {
-            background: linear-gradient(135deg, #2563eb, #4f46e5);
-            color: white;
-            padding: 0.625rem 1.5rem;
-            border-radius: 2rem;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.875rem;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-create:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
-        }
-
-        /* Posts List */
-        .posts-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .post-card {
-            background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            border: 1px solid #eef2ff;
-            transition: all 0.2s;
-        }
-
-        .post-card:hover {
-            border-color: #cbd5e1;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            margin-bottom: 0.75rem;
-        }
-
-        .post-author {
-            font-weight: 600;
-            color: #2563eb;
-            font-size: 0.813rem;
-            background: #eff6ff;
-            padding: 0.25rem 0.75rem;
-            border-radius: 2rem;
-        }
-
-        .post-date {
-            font-size: 0.688rem;
-            color: #94a3b8;
-        }
-
-        .post-category {
-            font-size: 0.688rem;
-            font-weight: 600;
-            padding: 0.25rem 0.75rem;
-            border-radius: 2rem;
-            background: #f1f5f9;
-            color: #475569;
-        }
-
-        .post-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #0f172a;
-            line-height: 1.4;
-        }
-
-        .post-content {
-            font-size: 0.875rem;
-            color: #475569;
-            margin-bottom: 1rem;
-            line-height: 1.5;
-        }
-
-        .post-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 0.75rem;
-            padding-top: 0.75rem;
-            border-top: 1px solid #f0f2f5;
-        }
-
-        .vote-section {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        .vote-btn {
-            background: none;
-            border: none;
-            font-size: 1rem;
-            cursor: pointer;
-            padding: 0.375rem 0.625rem;
-            color: #64748b;
-            transition: all 0.2s;
-            border-radius: 2rem;
-        }
-
-        .vote-btn:hover {
-            background: #f1f5f9;
-            transform: scale(1.05);
-        }
-
-        .vote-count {
-            font-weight: 600;
-            font-size: 0.813rem;
-            color: #334155;
-            min-width: 28px;
-            text-align: center;
-        }
-
-        .comment-section {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .comment-count {
-            font-size: 0.813rem;
-            color: #5b6e8c;
-        }
-
-        .comment-btn {
-            background: none;
-            border: none;
-            font-size: 0.813rem;
-            color: #2563eb;
-            cursor: pointer;
-            padding: 0.25rem 0.5rem;
-            border-radius: 2rem;
-            transition: all 0.2s;
-        }
-
-        .comment-btn:hover {
-            background: #eff6ff;
-        }
-
-        /* Comments */
-        .comments-area {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #f0f2f5;
-            display: none;
-        }
-
-        .comments-area.show {
-            display: block;
-        }
-
-        .comment {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #f8fafc;
-        }
-
-        .comment-author {
-            font-weight: 600;
-            font-size: 0.75rem;
-            color: #2563eb;
-        }
-
-        .comment-text {
-            font-size: 0.813rem;
-            color: #334155;
-            margin-top: 0.25rem;
-        }
-
-        .comment-votes {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 0.375rem;
-        }
-
-        .add-comment {
-            margin-top: 0.75rem;
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .add-comment input {
-            flex: 1;
-            padding: 0.625rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 2rem;
-            font-size: 0.813rem;
-            font-family: inherit;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .add-comment input:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 2px rgba(37,99,235,0.1);
-        }
-
-        .add-comment button {
-            padding: 0.5rem 1.25rem;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 2rem;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.813rem;
-            transition: all 0.2s;
-        }
-
-        .add-comment button:hover {
-            background: #1d4ed8;
-        }
-
-        .empty-state {
-            background: white;
-            border-radius: 1rem;
-            padding: 3rem;
-            text-align: center;
-            color: #64748b;
-            border: 1px solid #eef2ff;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(4px);
-        }
-
-        .modal:target {
-            display: flex;
-        }
-
-        .modal-card {
-            background: white;
-            border-radius: 1.5rem;
-            max-width: 450px;
-            width: 90%;
-            padding: 2rem;
-            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.2);
-        }
-
-        .modal-card h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1.25rem;
-            color: #0f172a;
-        }
-
-        .modal-card input,
-        .modal-card textarea,
-        .modal-card select {
-            width: 100%;
-            padding: 0.75rem;
-            margin: 0.5rem 0;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.75rem;
-            font-family: inherit;
-            font-size: 0.875rem;
-            transition: all 0.2s;
-        }
-
-        .modal-card input:focus,
-        .modal-card textarea:focus,
-        .modal-card select:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 2px rgba(37,99,235,0.1);
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
-        }
-
-        .modal-btn {
-            padding: 0.5rem 1rem;
-            border-radius: 0.75rem;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.875rem;
-        }
-
-        .modal-btn.cancel {
-            background: #f1f5f9;
-            color: #475569;
-        }
-
-        .modal-btn.cancel:hover {
-            background: #e2e8f0;
-        }
-
-        .modal-btn.submit {
-            background: #2563eb;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .modal-btn.submit:hover {
-            background: #1d4ed8;
-        }
-
-        .error-msg {
-            color: #dc2626;
-            font-size: 0.75rem;
-            margin-top: 0.25rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: #94a3b8;
-            font-size: 0.75rem;
-            border-top: 1px solid #eef2ff;
-            margin-top: 2rem;
-        }
-
-        @media (max-width: 768px) {
-            .forum-layout {
-                flex-direction: column;
-                padding: 1rem;
-            }
-            .sidebar {
-                width: 100%;
-                position: static;
-            }
-            .filter-bar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .navbar {
-                padding: 0.75rem 1rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="static/Global.css">
+    <link rel="stylesheet" href="static/main.css">
+    <link rel="stylesheet" href="static/navbar.css">
+    <link rel="stylesheet" href="static/post.css">
+    <link rel="stylesheet" href="static/filter.css">
+    <link rel="stylesheet" href="static/comments.css">
+    <link rel="stylesheet" href="static/categories.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"/>
 </head>
 <body>
 
@@ -678,9 +68,9 @@
     <main class="main-content">
         <div class="filter-bar">
             <div class="filter-group">
-                <a href="#" data-filter="all" class="filter-btn active" id="filterAll">📋 All Posts</a>
-                <a href="#" data-filter="my" class="filter-btn" id="filterMy">👤 My Posts</a>
-                <a href="#" data-filter="liked" class="filter-btn" id="filterLiked">❤️ Liked Posts</a>
+                <a href="/?filter=all" class="filter-btn active">📋 All Posts</a>
+                <a href="/?filter=myposts" class="filter-btn">👤 My Posts</a>
+                <a href="/?filter=liked" class="filter-btn">❤️ Liked Posts</a>
             </div>
             <div class="results-count" id="resultsCount">0 posts</div>
         </div>
@@ -688,14 +78,32 @@
         <div class="create-post-bar">
             <a href="#createPostModal" class="btn-create" id="createPostBtn">+ New Post</a>
         </div>
+        <div class="posts-list">
+        {{range .}}
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="avatar">{{slice .Username 0 1}}</div>
+                    <div class="post-author-info">
+                        <span class="post-username">@{{.Username}}</span>
+                        <span class="post-date">{{.CreatedAt}}</span>
+                    </div>
+                </div>
+                <div class="post-body">
+                    <h2 class="post-title">{{.Title}}</h2>
+                    <p class="post-content">{{.Content}}</p>
+                </div>
+            </div>
+        {{end}}
+        {{if eq (len .) 0}}
+            <div class="empty">No posts found.</div>
+        {{end}}
+        </div>
 
-        <div class="posts-list" id="postsList"></div>
     </main>
+    
 </div>
 
-<footer>
-    <p>Forum • built with Go + SQLite • open discussion</p>
-</footer>
+
 
 <!-- Login Modal -->
 <div id="loginModal" class="modal">
@@ -736,19 +144,36 @@
 <div id="createPostModal" class="modal">
     <div class="modal-card">
         <h3>Create new post</h3>
-        <form id="createPostForm">
-            <input type="text" id="postTitle" placeholder="Post title" required>
-            <select id="postCategory">
-                <option value="Technology">💻 Technology</option>
-                <option value="General">💬 General</option>
-                <option value="Help">🆘 Help & Support</option>
-            </select>
-            <textarea id="postContent" rows="4" placeholder="Share your thoughts..." required></textarea>
-            <div id="postError" class="error-msg"></div>
-            <div class="modal-buttons">
-                <a href="#" class="modal-btn cancel">Cancel</a>
-                <button type="submit" class="modal-btn submit">Publish</button>
-            </div>
-        </form>
+        
+        <form action="/Post/CreatePost" method="post">
+    <input
+        type="text"
+        id="postTitle"
+        name="title"
+        placeholder="Post title"
+        required
+    >
+
+    <select id="postCategory" name="category">
+        <option value="Technology">💻 Technology</option>
+        <option value="General">💬 General</option>
+        <option value="Help">🆘 Help & Support</option>
+    </select>
+
+    <textarea
+        id="postContent"
+        name="content"
+        rows="4"
+        placeholder="Share your thoughts..."
+        required
+    ></textarea>
+
+    <div id="postError" class="error-msg"></div>
+
+    <div class="modal-buttons">
+        <a href="#" class="modal-btn cancel">Cancel</a>
+        <button type="submit" class="modal-btn submit">Publish</button>
+    </div>
+    </form>
     </div>
 </div>
