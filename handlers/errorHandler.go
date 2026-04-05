@@ -36,6 +36,7 @@ func ErrorHandler(w http.ResponseWriter, message string, statusCode int) {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
+	w.WriteHeader(statusCode) // Set the HTTP status code for the response
 
 	// Write the HTTP status code and the buffered content to the response
 	w.Write(buff.Bytes())

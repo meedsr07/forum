@@ -68,9 +68,9 @@
     <main class="main-content">
         <div class="filter-bar">
             <div class="filter-group">
-                <a href="#" data-filter="all" class="filter-btn active" id="filterAll">📋 All Posts</a>
-                <a href="#" data-filter="my" class="filter-btn" id="filterMy">👤 My Posts</a>
-                <a href="#" data-filter="liked" class="filter-btn" id="filterLiked">❤️ Liked Posts</a>
+                <a href="/?filter=all" class="filter-btn active">📋 All Posts</a>
+                <a href="/?filter=myposts" class="filter-btn">👤 My Posts</a>
+                <a href="/?filter=liked" class="filter-btn">❤️ Liked Posts</a>
             </div>
             <div class="results-count" id="resultsCount">0 posts</div>
         </div>
@@ -78,42 +78,32 @@
         <div class="create-post-bar">
             <a href="#createPostModal" class="btn-create" id="createPostBtn">+ New Post</a>
         </div>
-
-        <div class="posts-list" id="postsList">
-            <a class="post-card" href="/Post?id_Post=969">
-                <h1 class="post-title">Title</h1>
+        <div class="posts-list">
+        {{range .}}
+            <div class="post-card">
                 <div class="post-header">
-                    <div class="author-info" >
-                        <p class="post-author">ana m9awed 3lokom kamlin </p>
-                        <p class="post-date "> 09/09/3965 00:00</p>
-                    </div>
-                    <div class="post-category">lahwa dwa o nik vitamin</div>
-                    <div class="post-vote">
-                        <div class="dislike vote-btn">
-                        <i class="fa-regular fa-thumbs-down"></i>
-                        <!-- <i class="fa-solid fa-thumbs-down"></i> -->
-                        <span class="vote-count">2</span>
-                    </div>
-                    <div class="like vote-btn ">
-                        <i class="fa-regular fa-thumbs-up"></i>
-                        <!-- <i class="fa-solid fa-thumbs-up"></i> -->
-                        <span class="vote-count " >2</span>
-                    </div>
-                    <div class="vote-btn">
-                        <i class="fa-regular fa-comment"></i>
-                        <span class="vote-count">2</span>
-                    </div>
+                    <div class="avatar">{{slice .Username 0 1}}</div>
+                    <div class="post-author-info">
+                        <span class="post-username">@{{.Username}}</span>
+                        <span class="post-date">{{.CreatedAt}}</span>
                     </div>
                 </div>
-            </a>
+                <div class="post-body">
+                    <h2 class="post-title">{{.Title}}</h2>
+                    <p class="post-content">{{.Content}}</p>
+                </div>
+            </div>
+        {{end}}
+        {{if eq (len .) 0}}
+            <div class="empty">No posts found.</div>
+        {{end}}
         </div>
+
     </main>
     
 </div>
 
-<footer>
-    <p>Forum • built with Go + SQLite • open discussion</p>
-</footer>
+
 
 <!-- Login Modal -->
 <div id="loginModal" class="modal">

@@ -2,8 +2,11 @@ package handlers
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
+
 	"forum/database"
+	"forum/models"
 )
 
 func GetUserID(r *http.Request) (int, error) {
@@ -22,9 +25,49 @@ func GetUserID(r *http.Request) (int, error) {
 	return userID, nil
 }
 
-// func Feltring(w http.ResponseWriter, r *http.Request) {
-// 	UserId, err := GetUserID(r)
-// 	if err != nil {
-// 		return
-// 	}
-// }
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
+	userID, sessionErr := GetUserID(r)
+	filter := r.URL.Query().Get("filter")
+
+	var Post []models.Post
+	var err error
+
+	switch filter {
+
+	case "myposts":
+		if sessionErr != nil {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
+		Post, err = database.GetMyPosts(database.DB, userID)
+		if err != nil {
+			ErrorHandler(w, "internal server error", 500)
+			return
+		}
+
+	case "liked":
+		if sessionErr != nil {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
+		Post, err = database.GetLikedPosts(database.DB, userID)
+		if err != nil {
+			ErrorHandler(w, "internal server error", 500)
+			return
+		}
+
+	default:
+		Post, err = database.Getallpost(database.DB)
+		if err != nil {
+			ErrorHandler(w, "internal server error", 500)
+			return
+		}
+	}
+
+	tmpl, err := template.ParseFiles("templates/index.html")
+	if err != nil {
+		http.Error(w, "page not found", 404)
+		return
+	}
+	tmpl.Execute(w, Post)
+}

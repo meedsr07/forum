@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"forum/database"
 	"forum/handlers"
-	"forum/models"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
-	http.HandleFunc("/", handlers.HomePage)
-	http.HandleFunc("/Post/CreatePost", models.CreateNewPost)
+	http.HandleFunc("/", handlers.HomeHandler)
+	http.HandleFunc("/Post/CreatePost", handlers.CreateNewPost)
 	http.HandleFunc("/login", handlers.Login)
 	http.HandleFunc("/static/", handlers.StaticHandlers)
 	db, err := database.InitDB("forum.db")
@@ -20,9 +20,14 @@ func main() {
 	}
 
 	defer db.Close()
-	fmt.Println("server is start in http://localhost:8080")
 
-	err = http.ListenAndServe(":8080", nil)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8089"
+	}
+	fmt.Printf("server is start in http://localhost:%s\n", port)
+
+	err = http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
