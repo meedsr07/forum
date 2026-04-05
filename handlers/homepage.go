@@ -10,10 +10,13 @@ import (
 func HomeHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	// 1. Check if user is logged in (but don't force it!)
 	userID, err := GetUserIDFromCookie(r, db)
-	
+
 	isLoggedIn := (err == nil)
 	username := ""
-
+	if r.URL.Path != "/homepage" && r.URL.Path != "/" {
+		ErrorHandler(w, "404 Page Not Found", http.StatusNotFound)
+		return
+	}
 	// 2. If logged in, get the real username from the database
 	if isLoggedIn {
 		err = db.QueryRow("SELECT username FROM users WHERE id = ?", userID).Scan(&username)

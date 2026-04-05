@@ -28,6 +28,10 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		tmpl.ExecuteTemplate(w, "register.html", nil)
 		return
 	}
+	if r.URL.Path != "/register" {
+		ErrorHandler(w, "404 Page Not Found", http.StatusNotFound)
+		return
+	}
 
 	// 2. If POST request: Save the new user
 	if r.Method == http.MethodPost {
@@ -54,7 +58,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		if !usernameRegex.MatchString(username) {
 			w.WriteHeader(http.StatusBadRequest)
 			tmpl.ExecuteTemplate(w, "register.html", map[string]interface{}{
-				"Error": "Username must be 3-20 characters long and contain only letters, numbers, and underscores.",
+				"Error": "Username must contain only letters and numbers.",
 			})
 			return
 		}
@@ -66,6 +70,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 			})
 			return
 		}
+
 		var existingID int
 		err = db.QueryRow("SELECT id FROM users WHERE email = ? OR username = ?", email, username).Scan(&existingID)
 
@@ -97,6 +102,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 
 			return
 		}
+
 		if !strings.ContainsAny(password, "0123456789") {
 			w.WriteHeader(http.StatusBadRequest)
 			tmpl.ExecuteTemplate(w, "register.html", map[string]interface{}{
@@ -110,7 +116,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 			w.WriteHeader(http.StatusInternalServerError)
 			log.Println("Bcrypt hash error:", err)
 			tmpl.ExecuteTemplate(w, "register.html", map[string]interface{}{
-				"Error": "Error hashing password",
+				"Error": "Error creating account, try again later",
 			})
 			return
 		}

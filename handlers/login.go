@@ -24,6 +24,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		tmpl.ExecuteTemplate(w, "login.html", nil)
 		return
 	}
+	if r.URL.Path != "/login" {
+		ErrorHandler(w, "404 Page Not Found", http.StatusNotFound)
+		return
+	}
 
 	// 2. If the user submitted the login form (POST request)
 	if r.Method == http.MethodPost {
@@ -47,7 +51,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 				return
 			}
 			// Database error
-			http.Error(w, "Server error", http.StatusInternalServerError)
+			ErrorHandler(w, "Server error", http.StatusInternalServerError)
 			return
 		}
 
@@ -69,7 +73,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		_, err = db.Exec("INSERT INTO user_sessions (user_id, session_token, expires_at) VALUES (?, ?, ?)", dbID, sessionToken, time.Now().Add(24*time.Hour))
 		if err != nil {
 			log.Println("Error saving session to DB:", err)
-			http.Error(w, "Could not create session", http.StatusInternalServerError)
+			ErrorHandler(w, "Error creating session, try again later", http.StatusInternalServerError)
 			return
 		}
 		// f. Create a cookie and attach the token

@@ -26,7 +26,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// Prevent the "/" route from stealing other URLs (like /register)
 		if r.URL.Path != "/" {
-			http.NotFound(w, r)
+			handlers.ErrorHandler(w, "404 Page Not Found", http.StatusNotFound)
 			return
 		}
 		handlers.HomeHandler(w, r, db)
