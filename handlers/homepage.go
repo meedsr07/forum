@@ -22,6 +22,8 @@ func HomeHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		err = db.QueryRow("SELECT username FROM users WHERE id = ?", userID).Scan(&username)
 		if err != nil {
 			log.Println("Error fetching username:", err)
+			ErrorHandler(w, "Internal Server Error", http.StatusInternalServerError)
+			return
 		}
 	}
 
@@ -40,6 +42,6 @@ func HomeHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	err = tmpl.ExecuteTemplate(w, "index.html", data)
 	if err != nil {
 		log.Println("Error rendering home page:", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		ErrorHandler(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }

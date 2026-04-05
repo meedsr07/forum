@@ -137,8 +137,5 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	}
 
 	// 3. Reject anything else
-	w.WriteHeader(http.StatusMethodNotAllowed)
-	tmpl.ExecuteTemplate(w, "register.html", map[string]interface{}{
-		"Error": "Method Not Allowed",
-	})
+	ErrorHandler(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 }

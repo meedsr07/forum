@@ -25,7 +25,7 @@ func ErrorHandler(w http.ResponseWriter, message string, statusCode int) {
 	tmpl, err := template.ParseFiles("templates/error.html")
 	if err != nil {
 		// If the template cannot be parsed, return a generic 500 error to avoid infinite recursion
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		ErrorHandler(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
@@ -33,7 +33,7 @@ func ErrorHandler(w http.ResponseWriter, message string, statusCode int) {
 	var buff bytes.Buffer
 	if err := tmpl.Execute(&buff, errorPage); err != nil {
 		// If the template cannot be executed, return a generic 500 error
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		ErrorHandler(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
