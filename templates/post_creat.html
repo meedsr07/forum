@@ -1,0 +1,54 @@
+{{define "content"}}
+<div class="create-container">
+    <div class="create-card">
+        <div class="create-header">
+            <h1>Create New Post</h1>
+            <p>Share something with the community</p>
+        </div>
+
+        {{if .Errors}}
+        <div class="alert alert-error">
+            {{range .Errors}}
+            <p>⚠️ {{.}}</p>
+            {{end}}
+        </div>
+        {{end}}
+
+        <form action="/post/create" method="POST" class="create-form" id="create-post-form">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" value="{{.PostTitle}}"
+                       placeholder="Give your post a descriptive title" required
+                       maxlength="200">
+            </div>
+
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea id="content" name="content" rows="10"
+                          placeholder="Write your post content here..."
+                          required>{{.Content}}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Categories</label>
+                <p class="form-hint">Select at least one category</p>
+                <div class="checkbox-group" id="categories-group">
+                    {{range .Categories}}
+                    <label class="checkbox-label" for="cat-{{.ID}}">
+                        <input type="checkbox" id="cat-{{.ID}}" name="categories" value="{{.ID}}">
+                        <span class="checkbox-text">{{.Name}}</span>
+                    </label>
+                    {{end}}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="/" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary" id="create-post-submit">
+                    Publish Post
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{{end}}

@@ -1,0 +1,56 @@
+{{define "content"}}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>Create Account</h1>
+            <p>Join our community and start sharing</p>
+        </div>
+
+        {{if .Errors}}
+        <div class="alert alert-error">
+            {{range .Errors}}
+            <p>⚠️ {{.}}</p>
+            {{end}}
+        </div>
+        {{end}}
+
+        <form action="/register" method="POST" class="auth-form" id="register-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" value="{{.Username}}"
+                       placeholder="Choose a username" required minlength="3" maxlength="30"
+                       autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="{{.Email}}"
+                       placeholder="you@example.com" required
+                       autocomplete="email">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password"
+                       placeholder="At least 6 characters" required minlength="6"
+                       autocomplete="new-password">
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password"
+                       placeholder="Repeat your password" required minlength="6"
+                       autocomplete="new-password">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="register-submit">
+                Create Account
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a href="/login">Login here</a></p>
+        </div>
+    </div>
+</div>
+{{end}}

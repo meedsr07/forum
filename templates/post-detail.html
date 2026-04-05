@@ -1,0 +1,109 @@
+{{define "content"}}
+<div class="post-detail-layout">
+    <!-- Post content -->
+    <article class="post-detail">
+        <div class="post-detail-header">
+            <div class="post-categories">
+                {{range .Post.Categories}}
+                <a href="/filter?category={{.ID}}" class="badge">{{.Name}}</a>
+                {{end}}
+            </div>
+            <h1 class="post-detail-title">{{.Post.Title}}</h1>
+            <div class="post-meta">
+                <span class="post-author-avatar">{{slice .Post.Author 0 1}}</span>
+                <span class="post-author">{{.Post.Author}}</span>
+                <span class="post-date">{{timeAgo .Post.CreatedAt}}</span>
+            </div>
+        </div>
+
+        <div class="post-detail-content">
+            {{.Post.Content}}
+        </div>
+
+        <!-- Post voting -->
+        <div class="vote-section">
+            {{if $.User}}
+            <form action="/like" method="POST" class="vote-form">
+                <input type="hidden" name="post_id" value="{{.Post.ID}}">
+                <button type="submit" class="vote-btn {{if eq $.UserPostVote 1}}vote-active{{end}}" title="Like">
+                    👍 <span>{{.Post.Likes}}</span>
+                </button>
+            </form>
+            <form action="/dislike" method="POST" class="vote-form">
+                <input type="hidden" name="post_id" value="{{.Post.ID}}">
+                <button type="submit" class="vote-btn vote-btn-dislike {{if eq $.UserPostVote -1}}vote-active-dislike{{end}}" title="Dislike">
+                    👎 <span>{{.Post.Dislikes}}</span>
+                </button>
+            </form>
+            {{else}}
+            <span class="vote-btn vote-btn-disabled" title="Login to vote">👍 <span>{{.Post.Likes}}</span></span>
+            <span class="vote-btn vote-btn-disabled" title="Login to vote">👎 <span>{{.Post.Dislikes}}</span></span>
+            {{end}}
+        </div>
+    </article>
+
+    <!-- Comments section -->
+    <section class="comments-section">
+        <h2 class="comments-title">💬 Comments ({{len .Comments}})</h2>
+
+        <!-- Comment form -->
+        {{if $.User}}
+        <form action="/comment/create" method="POST" class="comment-form" id="comment-form">
+            <input type="hidden" name="post_id" value="{{.Post.ID}}">
+            <div class="form-group">
+                <textarea name="content" id="comment-content" rows="3"
+                          placeholder="Write a comment..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" id="comment-submit">Post Comment</button>
+        </form>
+        {{else}}
+        <div class="login-prompt">
+            <p><a href="/login">Login</a> to join the discussion</p>
+        </div>
+        {{end}}
+
+        <!-- Comments list -->
+        {{if .Comments}}
+        <div class="comments-list">
+            {{range .Comments}}
+            <div class="comment-card" id="comment-{{.ID}}">
+                <div class="comment-header">
+                    <span class="comment-author-avatar">{{slice .Author 0 1}}</span>
+                    <span class="comment-author">{{.Author}}</span>
+                    <span class="comment-date">{{timeAgo .CreatedAt}}</span>
+                </div>
+                <div class="comment-body">
+                    {{.Content}}
+                </div>
+                <div class="comment-footer">
+                    {{if $.User}}
+                    <form action="/like" method="POST" class="vote-form">
+                        <input type="hidden" name="comment_id" value="{{.ID}}">
+                        <input type="hidden" name="redirect_post_id" value="{{$.Post.ID}}">
+                        <button type="submit" class="vote-btn vote-btn-sm {{if eq (index $.UserCommentVotes .ID) 1}}vote-active{{end}}" title="Like">
+                            👍 {{.Likes}}
+                        </button>
+                    </form>
+                    <form action="/dislike" method="POST" class="vote-form">
+                        <input type="hidden" name="comment_id" value="{{.ID}}">
+                        <input type="hidden" name="redirect_post_id" value="{{$.Post.ID}}">
+                        <button type="submit" class="vote-btn vote-btn-sm vote-btn-dislike {{if eq (index $.UserCommentVotes .ID) -1}}vote-active-dislike{{end}}" title="Dislike">
+                            👎 {{.Dislikes}}
+                        </button>
+                    </form>
+                    {{else}}
+                    <span class="vote-btn vote-btn-sm vote-btn-disabled">👍 {{.Likes}}</span>
+                    <span class="vote-btn vote-btn-sm vote-btn-disabled">👎 {{.Dislikes}}</span>
+                    {{end}}
+                </div>
+            </div>
+            {{end}}
+        </div>
+        {{else}}
+        <div class="empty-state empty-state-small">
+            <p>No comments yet. Be the first to share your thoughts!</p>
+        </div>
+        {{end}}
+    </section>
+</div>
+{{end}}

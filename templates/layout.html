@@ -1,0 +1,53 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GoForum - A modern community forum built with Go">
+    <title>{{if .Title}}{{.Title}} — GoForum{{else}}GoForum{{end}}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <span class="logo-icon">💬</span>
+                <span class="logo-text">GoForum</span>
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                {{if .User}}
+                    <a href="/post/create" class="nav-link btn-create">
+                        <span>＋</span> New Post
+                    </a>
+                    <div class="nav-user">
+                        <span class="user-avatar">{{slice .User.Username 0 1}}</span>
+                        <span class="user-name">{{.User.Username}}</span>
+                    </div>
+                    <a href="/logout" class="nav-link btn-logout">Logout</a>
+                {{else}}
+                    <a href="/login" class="nav-link">Login</a>
+                    <a href="/register" class="nav-link btn-register">Register</a>
+                {{end}}
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            {{template "content" .}}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>GoForum &copy; 2024 — Built with Go, SQLite &amp; ❤️</p>
+        </div>
+    </footer>
+</body>
+</html>
+{{end}}

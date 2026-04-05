@@ -1,0 +1,16 @@
+{{define "content"}}
+<div class="error-container">
+    <div class="error-card">
+        <div class="error-code">{{.ErrorCode}}</div>
+        <h1 class="error-title">
+            {{if eq .ErrorCode 404}}Page Not Found
+            {{else if eq .ErrorCode 500}}Server Error
+            {{else if eq .ErrorCode 400}}Bad Request
+            {{else if eq .ErrorCode 405}}Method Not Allowed
+            {{else}}Error{{end}}
+        </h1>
+        <p class="error-message">{{.ErrorMessage}}</p>
+        <a href="/" class="btn btn-primary">← Back to Home</a>
+    </div>
+</div>
+{{end}}

@@ -1,0 +1,94 @@
+{{define "content"}}
+<div class="home-layout">
+    <!-- Sidebar with filters -->
+    <aside class="sidebar">
+        <div class="sidebar-card">
+            <h3 class="sidebar-title">📂 Categories</h3>
+            <div class="category-list">
+                {{range .Categories}}
+                <a href="/filter?category={{.ID}}" class="category-link">{{.Name}}</a>
+                {{end}}
+            </div>
+        </div>
+
+        {{if .User}}
+        <div class="sidebar-card">
+            <h3 class="sidebar-title">🔖 My Filters</h3>
+            <div class="filter-list">
+                <a href="/filter?my_posts=true" class="filter-link">📝 My Posts</a>
+                <a href="/filter?liked=true" class="filter-link">❤️ Liked Posts</a>
+            </div>
+        </div>
+        {{end}}
+
+        {{if .User}}
+        <div class="sidebar-card">
+            <a href="/post/create" class="btn btn-primary btn-block">
+                ＋ Create New Post
+            </a>
+        </div>
+        {{end}}
+    </aside>
+
+    <!-- Main post listing -->
+    <section class="posts-section">
+        {{if .FilterTitle}}
+        <div class="filter-header">
+            <h2>{{.FilterTitle}}</h2>
+            <a href="/" class="btn btn-secondary btn-sm">✕ Clear Filter</a>
+        </div>
+        {{else}}
+        <div class="section-header">
+            <h1>Latest Posts</h1>
+            <p class="section-subtitle">Join the conversation</p>
+        </div>
+        {{end}}
+
+        {{if .Posts}}
+        <div class="posts-grid">
+            {{range .Posts}}
+            <article class="post-card">
+                <div class="post-card-header">
+                    <div class="post-meta">
+                        <span class="post-author-avatar">{{slice .Author 0 1}}</span>
+                        <span class="post-author">{{.Author}}</span>
+                        <span class="post-date">{{timeAgo .CreatedAt}}</span>
+                    </div>
+                    <div class="post-categories">
+                        {{range .Categories}}
+                        <span class="badge">{{.Name}}</span>
+                        {{end}}
+                    </div>
+                </div>
+                <div class="post-card-body">
+                    <h2 class="post-title">
+                        <a href="/post?id={{.ID}}">{{.Title}}</a>
+                    </h2>
+                    <p class="post-excerpt">{{if gt (len .Content) 200}}{{slice .Content 0 200}}...{{else}}{{.Content}}{{end}}</p>
+                </div>
+                <div class="post-card-footer">
+                    <div class="post-stats">
+                        <span class="stat stat-like" title="Likes">👍 {{.Likes}}</span>
+                        <span class="stat stat-dislike" title="Dislikes">👎 {{.Dislikes}}</span>
+                        <span class="stat stat-comments" title="Comments">💬 {{.CommentCount}}</span>
+                    </div>
+                    <a href="/post?id={{.ID}}" class="btn btn-ghost btn-sm">Read More →</a>
+                </div>
+            </article>
+            {{end}}
+        </div>
+        {{else}}
+        <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <h3>No posts yet</h3>
+            <p>Be the first to start a conversation!</p>
+            {{if $.User}}
+            <a href="/post/create" class="btn btn-primary">Create Post</a>
+            {{else}}
+            <a href="/login" class="btn btn-primary">Login to Post</a>
+            {{end}}
+        </div>
+        {{end}}
+    </section>
+</div>
+{{end}}
