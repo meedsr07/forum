@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="static/Global.css">
-    <link rel="stylesheet" href="static/main.css">
-    <link rel="stylesheet" href="static/navbar.css">
-    <link rel="stylesheet" href="static/post.css">
-    <link rel="stylesheet" href="static/filter.css">
-    <link rel="stylesheet" href="static/comments.css">
-    <link rel="stylesheet" href="static/categories.css">
+    <link rel="stylesheet" href="/static/Global.css">
+    <link rel="stylesheet" href="/static/main.css">
+    <link rel="stylesheet" href="/static/navbar.css">
+    <link rel="stylesheet" href="/static/post.css">
+    <link rel="stylesheet" href="/static/filter.css">
+    <link rel="stylesheet" href="/static/comments.css">
+    <link rel="stylesheet" href="/static/categories.css">
 </head>
 <body>
 
@@ -77,7 +77,8 @@
         </div>
 
         <div class="posts-list">
-        {{range .}}
+        {{range .}} 
+        <a href="/post/{{.ID}}" style="display:block; text-decoration:none; color:inherit;">
             <div class="post-card">
                 <div class="post-header">
                     <div class="avatar">{{slice .Username 0 1}}</div>
@@ -91,6 +92,8 @@
                     <p class="post-content">{{.Content}}</p>
                 </div>
             </div>
+        </a>
+            
         {{end}}
         {{if eq (len .) 0}}
             <div class="empty">No posts found.</div>
