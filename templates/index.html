@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="static/filter.css">
     <link rel="stylesheet" href="static/comments.css">
     <link rel="stylesheet" href="static/categories.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"/>
 </head>
 <body>
 
@@ -72,12 +71,11 @@
                 <a href="/?filter=myposts" class="filter-btn">👤 My Posts</a>
                 <a href="/?filter=liked" class="filter-btn">❤️ Liked Posts</a>
             </div>
-            <div class="results-count" id="resultsCount">0 posts</div>
+            <div class="create-post-bar">
+                <a href="#createPostModal" class="btn-create" id="createPostBtn">+ New Post</a>
+            </div>
         </div>
 
-        <div class="create-post-bar">
-            <a href="#createPostModal" class="btn-create" id="createPostBtn">+ New Post</a>
-        </div>
         <div class="posts-list">
         {{range .}}
             <div class="post-card">
