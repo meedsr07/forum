@@ -24,12 +24,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		tmpl.ExecuteTemplate(w, "login.html", nil)
 		return
 	}
-	if r.URL.Path != "/login" {
-		ErrorHandler(w, "404 Page Not Found", http.StatusNotFound)
-		return
-	}
 
-	// 2. If the user submitted the login form (POST request)
+	// 2. If the user submitted the login form (POSST request)
 	if r.Method == http.MethodPost {
 		// a. Get the data entered by the user
 		identifier := r.FormValue("identify") // Can be either username or email

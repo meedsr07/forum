@@ -28,10 +28,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		tmpl.ExecuteTemplate(w, "register.html", nil)
 		return
 	}
-	if r.URL.Path != "/register" {
-		ErrorHandler(w, "404 Page Not Found", http.StatusNotFound)
-		return
-	}
+	
 
 	// 2. If POST request: Save the new user
 	if r.Method == http.MethodPost {
