@@ -33,6 +33,10 @@ func main() {
 	})
 
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/login" {
+			handlers.ErrorHandler(w, "404 Page Not Found", http.StatusNotFound)
+			return
+		}
 		handlers.LoginHandler(w, r, db)
 	})
 
