@@ -42,6 +42,10 @@ func main() {
 
 	// 4. The Register Route: We send the 'db' variable to the handler
 	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/register" {
+			handlers.ErrorHandler(w, "404 Page Not Found", http.StatusNotFound)
+			return
+		}
 		handlers.RegisterHandler(w, r, db)
 	})
 	http.HandleFunc("/homepage", func(w http.ResponseWriter, r *http.Request) {
