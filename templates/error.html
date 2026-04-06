@@ -7,13 +7,18 @@
 
     <link rel="stylesheet" href="/static/global.css">
     <link rel="stylesheet" href="/static/errorpage.css">
-
 </head>
 <body>
-    <div class="container-error">
-         <h1>{{.Code}}</h1>
-         <p>{{.Message}}</p>
-         <a href="/" class="btn">Back to Home</a>
-    </div>
+    <main class="error-page">
+        <section class="error-card">
+            <div class="error-badge">Forum Error</div>
+            <h1 class="error-code">{{.Code}}</h1>
+            <p class="error-message">{{.Message}}</p>
+
+            <div class="error-actions">
+                <a href="/" class="btn-error">Back to Home</a>
+            </div>
+        </section>
+    </main>
 </body>
 </html>

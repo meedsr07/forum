@@ -18,8 +18,8 @@
 <nav class="navbar">
     <div class="logo">✦ Forum</div>
     <div class="nav-buttons" id="navButtons">
-        <a href="#loginModal" class="btn-login">Sign In</a>
-        <a href="#registerModal" class="btn-register">Join Forum</a>
+        <a href="/login" class="btn-login">Sign In</a>
+        <a href="/register" class="btn-register">Join Forum</a>
     </div>
     <div class="user-info" id="userInfo" style="display: none;">
         <span class="username" id="usernameDisplay"></span>
@@ -99,43 +99,6 @@
 
     </main>
     
-</div>
-
-
-
-<!-- Login Modal -->
-<div id="loginModal" class="modal">
-    <div class="modal-card">
-        <h3>Welcome back</h3>
-        <form id="loginForm">
-            <input type="email" id="loginEmail" placeholder="Email address" required>
-            <input type="password" id="loginPassword" placeholder="Password" required>
-            <div id="loginError" class="error-msg"></div>
-            <div class="modal-buttons">
-                <a href="#" class="modal-btn cancel">Cancel</a>
-                <button type="submit" class="modal-btn submit">Sign In</button>
-            </div>
-            <p style="margin-top: 1rem; font-size: 0.75rem; text-align: center;">New here? <a href="#registerModal" style="color: #2563eb;">Create account</a></p>
-        </form>
-    </div>
-</div>
-
-<!-- Register Modal -->
-<div id="registerModal" class="modal">
-    <div class="modal-card">
-        <h3>Join the community</h3>
-        <form id="registerForm">
-            <input type="text" id="regUsername" placeholder="Username" required>
-            <input type="email" id="regEmail" placeholder="Email" required>
-            <input type="password" id="regPassword" placeholder="Password" required>
-            <div id="registerError" class="error-msg"></div>
-            <div class="modal-buttons">
-                <a href="#" class="modal-btn cancel">Cancel</a>
-                <button type="submit" class="modal-btn submit">Register</button>
-            </div>
-            <p style="margin-top: 1rem; font-size: 0.75rem; text-align: center;">Already have an account? <a href="#loginModal" style="color: #2563eb;">Sign In</a></p>
-        </form>
-    </div>
 </div>
 
 <!-- Create Post Modal -->
