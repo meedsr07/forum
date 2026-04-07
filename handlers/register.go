@@ -2,13 +2,12 @@ package handlers
 
 import (
 	"database/sql"
+	"forum/database"
 	"html/template"
 	"log"
 	"net/http"
 	"regexp"
 	"strings"
-
-	"forum/database"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -30,7 +29,6 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		tmpl.ExecuteTemplate(w, "register.html", nil)
 		return
 	}
-	
 
 	// 2. If POST request: Save the new user
 	if r.Method == http.MethodPost {
