@@ -13,7 +13,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 
 	isLoggedIn := (err == nil)
 	username := ""
-	
+
 	// 2. If logged in, get the real username from the database
 	if isLoggedIn {
 		err = db.QueryRow("SELECT username FROM users WHERE id = ?", userID).Scan(&username)

@@ -23,6 +23,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		HttpOnly: true,
 		Path:     "/",
 	}
+	
 	http.SetCookie(w, &deletedCookie)
 
 	// 4. Send the user back to the homepage or login page
@@ -48,7 +49,6 @@ func GetUserIDFromCookie(r *http.Request, db *sql.DB) (int, error) {
 
 	// 3. Is the session expired?
 	if time.Now().After(expiresAt) {
-		// (Optional: You can delete it from DB here)
 		return 0, fmt.Errorf("session expired")
 	}
 
