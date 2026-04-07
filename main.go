@@ -14,6 +14,9 @@ func main() {
 	database.InitializeDB()
 	http.HandleFunc("/", handlers.HomeHandler)
 	http.HandleFunc("/Post/CreatePost", handlers.CreateNewPost)
+	http.HandleFunc("/login", handlers.LoginHandler)
+	http.HandleFunc("/register", handlers.RegisterHandler)
+	http.HandleFunc("/logout", handlers.LogoutHandler)
 	
 	http.HandleFunc("/static/", handlers.StaticHandlers)
 	fmt.Println("server is start in http://localhost:8080")

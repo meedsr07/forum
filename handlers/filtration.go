@@ -27,22 +27,23 @@ func GetUserID(r *http.Request) (int, error) {
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		ErrorHandler(w , http.StatusText(404) , 404)
+		ErrorHandler(w, http.StatusText(404), 404)
+		return
 	}
+
 	userID, sessionErr := GetUserID(r)
 	filter := r.URL.Query().Get("filter")
 
-	var Post []models.Post
+	var posts []models.Post
 	var err error
 
 	switch filter {
-
 	case "myposts":
 		if sessionErr != nil {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
-		Post, err = database.GetMyPosts(database.DB, userID)
+		posts, err = database.GetMyPosts(database.DB, userID)
 		if err != nil {
 			ErrorHandler(w, "internal server error", 500)
 			return
@@ -53,17 +54,30 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
-		Post, err = database.GetLikedPosts(database.DB, userID)
+		posts, err = database.GetLikedPosts(database.DB, userID)
 		if err != nil {
 			ErrorHandler(w, "internal server error", 500)
 			return
 		}
 
 	default:
-		Post, err = database.Getallpost(database.DB)
+		posts, err = database.Getallpost(database.DB)
 		if err != nil {
 			ErrorHandler(w, "internal server error", 500)
 			return
+		}
+	}
+
+	// Build auth state for the navbar
+	pageData := models.PageData{
+		Posts: posts,
+	}
+	if sessionErr == nil {
+		var username string
+		dbErr := database.DB.QueryRow("SELECT username FROM users WHERE id = ?", userID).Scan(&username)
+		if dbErr == nil {
+			pageData.IsLoggedIn = true
+			pageData.Username = username
 		}
 	}
 
@@ -72,5 +86,5 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "page not found", 404)
 		return
 	}
-	tmpl.Execute(w, Post)
+	tmpl.Execute(w, pageData)
 }

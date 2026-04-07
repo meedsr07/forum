@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Forum</title>
+    <link rel="stylesheet" href="/static/auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>Welcome back</h1>
+            <p>Enter your details to sign in to your account</p>
+        </div>
+
+        {{ if .Error }}
+        <div class="error-banner">
+            {{ .Error }}
+        </div>
+        {{ end }}
+
+        <form action="/login" method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="identify">Username or Email</label>
+                <input type="text" id="identify" name="identify" placeholder="you@example.com" required autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="auth-btn">Sign in</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Don't have an account? <a href="/register">Sign up</a></p>
+            <p style="margin-top: 0.5rem;"><a href="/">Return to Home</a></p>
+        </div>
+    </div>
+</body>
+</html>

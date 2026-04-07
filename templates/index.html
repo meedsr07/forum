@@ -17,14 +17,17 @@
 
 <nav class="navbar">
     <div class="logo">✦ Forum</div>
+    {{ if .IsLoggedIn }}
+    <div class="user-info" id="userInfo">
+        <span class="username" id="usernameDisplay">{{ .Username }}</span>
+        <a href="/logout" id="logoutBtn" class="btn-logout">Logout</a>
+    </div>
+    {{ else }}
     <div class="nav-buttons" id="navButtons">
         <a href="/login" class="btn-login">Sign In</a>
         <a href="/register" class="btn-register">Join Forum</a>
     </div>
-    <div class="user-info" id="userInfo" style="display: none;">
-        <span class="username" id="usernameDisplay"></span>
-        <a href="#" id="logoutBtn" class="btn-logout">Logout</a>
-    </div>
+    {{ end }}
 </nav>
 
 <div class="forum-layout">
@@ -77,7 +80,7 @@
         </div>
 
         <div class="posts-list">
-        {{range .}} 
+        {{range .Posts}} 
         <a href="/post/{{.ID}}" style="display:block; text-decoration:none; color:inherit;">
             <div class="post-card">
                 <div class="post-header">
@@ -95,7 +98,7 @@
         </a>
             
         {{end}}
-        {{if eq (len .) 0}}
+        {{if eq (len .Posts) 0}}
             <div class="empty">No posts found.</div>
         {{end}}
         </div>
