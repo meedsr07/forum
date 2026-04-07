@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"bytes"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -27,7 +28,7 @@ func GetUserID(r *http.Request) (int, error) {
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		ErrorHandler(w , http.StatusText(404) , 404)
+		ErrorHandler(w, http.StatusText(404), 404)
 	}
 	userID, sessionErr := GetUserID(r)
 	filter := r.URL.Query().Get("filter")
@@ -42,7 +43,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
-		Post, err = database.GetMyPosts(database.DB, userID)
+		Post, err = database.GetMyPosts(userID)
 		if err != nil {
 			ErrorHandler(w, "internal server error", 500)
 			return
@@ -53,14 +54,14 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
-		Post, err = database.GetLikedPosts(database.DB, userID)
+		Post, err = database.GetLikedPosts(userID)
 		if err != nil {
 			ErrorHandler(w, "internal server error", 500)
 			return
 		}
 
 	default:
-		Post, err = database.Getallpost(database.DB)
+		Post, err = database.Getallpost()
 		if err != nil {
 			ErrorHandler(w, "internal server error", 500)
 			return
@@ -72,5 +73,12 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "page not found", 404)
 		return
 	}
-	tmpl.Execute(w, Post)
+	var buff bytes.Buffer
+	if err := tmpl.Execute(&buff, Post); err != nil {
+		// If the template cannot be executed, return a generic 500 error
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	
+	w.Write(buff.Bytes())
 }

@@ -1,68 +1,50 @@
 package handlers
 
 import (
-	"forum/database"
+	"bytes"
+	"fmt"
+	"html/template"
 	"net/http"
-	"strings"
+	"strconv"
+
+	"forum/database"
 )
 
-func CreateNewPost(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
+func PostHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		ErrorHandler(w, http.StatusText(404), 404)
+		return
+	}
+	path := r.URL.Path
+	if len(path) < 6 || path[:6] != "/post/" {
 		ErrorHandler(w, http.StatusText(404), 404)
 		return
 	}
 
-	cookie, err := r.Cookie("session_id")
+	postID, err := strconv.Atoi(path[6:])
+	if err != nil || postID < 0 {
+		ErrorHandler(w, http.StatusText(404), 404)
+		return
+	}
+
+	post, err := database.GetOnePost(postID)
+	fmt.Println(post)
+	fmt.Println(err)
 	if err != nil {
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		ErrorHandler(w, http.StatusText(404), 404)
 		return
 	}
 
-	var userID int
-	err = database.DB.QueryRow("SELECT user_id FROM sessions WHERE id = ?", cookie.Value).Scan(&userID)
+	template, err := template.ParseFiles("templates/post.html")
 	if err != nil {
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return
-
-	}
-	err = r.ParseForm()
-	if err != nil {
-
-		ErrorHandler(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-
+		ErrorHandler(w, http.StatusText(500), 500)
 		return
 	}
-	title := r.FormValue("title")
-	content := r.FormValue("content")
-	category := r.FormValue("category")
-	title = strings.TrimSpace(title)
-	content = strings.TrimSpace(content)
-	category = strings.TrimSpace(category)
-	if title == "" || content == "" || category == "" || len(title) > 200 || len(content) > 4096 {
-		ErrorHandler(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	var buff bytes.Buffer
+	if err := template.Execute(&buff, post); err != nil {
+		// If the template cannot be executed, return a generic 500 error
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-
-	var categoryID int
-	err = database.DB.QueryRow(
-		"SELECT id FROM categories WHERE name = ?",
-		category,
-	).Scan(&categoryID)
-
-	if err != nil {
-		ErrorHandler(w, "Invalid category", http.StatusBadRequest)
-		return
-	}
-	_, err = database.DB.Exec(
-		`INSERT INTO posts (user_id, title, content, category_id)
-	 VALUES (?, ?, ?, ?)`,
-		userID, title, content, categoryID,
-	)
-	if err != nil {
-		ErrorHandler(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
-	}
-
-	http.Redirect(w, r, "/", http.StatusSeeOther)
-
+	w.Write(buff.Bytes())
 }

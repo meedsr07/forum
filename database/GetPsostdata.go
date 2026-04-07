@@ -1,12 +1,10 @@
 package database
 
 import (
-	"database/sql"
-
 	"forum/models"
 )
 
-func Getallpost(DB *sql.DB) ([]models.Post, error) {
+func Getallpost() ([]models.Post, error) {
 	var AllPost []models.Post
 	// asking the database to get data from the posts table
 	rows, err := DB.Query(`
@@ -32,7 +30,7 @@ func Getallpost(DB *sql.DB) ([]models.Post, error) {
 	return AllPost, nil
 }
 
-func GetMyPosts(DB *sql.DB, userID int) ([]models.Post, error) {
+func GetMyPosts(userID int) ([]models.Post, error) {
 	var UserPosts []models.Post
 
 	rows, err := DB.Query("SELECT id, user_id, Username , title, content, created_at FROM posts WHERE user_id = ?", userID)
@@ -53,7 +51,24 @@ func GetMyPosts(DB *sql.DB, userID int) ([]models.Post, error) {
 	return UserPosts, nil
 }
 
-func GetLikedPosts(DB *sql.DB, userID int) ([]models.Post, error) {
+func GetOnePost(postID int) (models.Post, error) {
+	var post models.Post
+
+	err := DB.QueryRow("SELECT id, user_id, title, content, created_at FROM posts WHERE id = ?",postID,).Scan(
+		&post.ID,
+		&post.UserID,
+		&post.Title,
+		&post.Content,
+		&post.CreatedAt,
+	)
+	if err != nil {
+		return models.Post{}, err
+	}
+
+	return post, nil
+}
+
+func GetLikedPosts(userID int) ([]models.Post, error) {
 	var LikedPosts []models.Post
 
 	rows, err := DB.Query(`
