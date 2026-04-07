@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"bytes"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -44,11 +43,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
-<<<<<<< HEAD
-		Post, err = database.GetMyPosts(userID)
-=======
-		posts, err = database.GetMyPosts(database.DB, userID)
->>>>>>> test-merge
+		posts, err = database.GetMyPosts(userID)
 		if err != nil {
 			ErrorHandler(w, "internal server error", 500)
 			return
@@ -59,22 +54,14 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
-<<<<<<< HEAD
-		Post, err = database.GetLikedPosts(userID)
-=======
-		posts, err = database.GetLikedPosts(database.DB, userID)
->>>>>>> test-merge
+		posts, err = database.GetLikedPosts(userID)
 		if err != nil {
 			ErrorHandler(w, "internal server error", 500)
 			return
 		}
 
 	default:
-<<<<<<< HEAD
-		Post, err = database.Getallpost()
-=======
-		posts, err = database.Getallpost(database.DB)
->>>>>>> test-merge
+		posts, err = database.Getallpost()
 		if err != nil {
 			ErrorHandler(w, "internal server error", 500)
 			return
@@ -99,16 +86,5 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "page not found", 404)
 		return
 	}
-<<<<<<< HEAD
-	var buff bytes.Buffer
-	if err := tmpl.Execute(&buff, Post); err != nil {
-		// If the template cannot be executed, return a generic 500 error
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-	
-	w.Write(buff.Bytes())
-=======
 	tmpl.Execute(w, pageData)
->>>>>>> test-merge
 }
