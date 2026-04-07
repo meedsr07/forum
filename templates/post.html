@@ -32,21 +32,21 @@
 
         <div class="post-detail-card">
             <div class="post-detail-header">
-                <div class="avatar">{{slice .Post.Username 0 1}}</div>
+                <div class="avatar">{{.Username}}</div>
                 <div class="post-detail-meta">
-                    <span class="post-detail-username">@{{.Post.Username}}</span>
-                    <span class="post-detail-date">{{.Post.CreatedAt}}</span>
+                    <span class="post-detail-username">@{{.Username}}</span>
+                    <span class="post-detail-date">{{.CreatedAt}}</span>
                 </div>
             </div>
-            <h1 class="post-detail-title">{{.Post.Title}}</h1>
-            <p class="post-detail-content">{{.Post.Content}}</p>
+            <h1 class="post-detail-title">{{.Title}}</h1>
+            <p class="post-detail-content">{{.Content}}</p>
             <div class="post-detail-footer">
                 <div class="vote-group">
-                    <form action="/post/{{.Post.ID}}/like" method="post" style="display:inline;">
+                    <form action="/post/{{.ID}}/like" method="post" style="display:inline;">
                         <button class="vote-btn-detail like">♥</button>
                     </form>
                     <span class="vote-num">4</span>
-                    <form action="/post/{{.Post.ID}}/dislike" method="post" style="display:inline;">
+                    <form action="/post/{{.ID}}/dislike" method="post" style="display:inline;">
                         <button class="vote-btn-detail dislike">♡</button>
                     </form>
                     <span class="vote-num dislike-num">6</span>
@@ -56,27 +56,25 @@
         </div>
         <!-- ADAK ZAMEL SYEB L comments 
         <div class="comments-section">
-            <h3 class="comments-title">{{len .Comments}} Comments</h3>
+            <h3 class="comments-title">Comments</h3>
 
-            {{range .Comments}}
+           
             <div class="comment-card">
-                <div class="comment-avatar">{{slice .Username 0 1}}</div>
+                <div class="comment-avatar">{{slice .Username}}</div>
                 <div class="comment-body">
                     <div class="comment-header">
                         <span class="comment-username">@{{.Username}}</span>
-                        <span class="comment-date">{{.CreatedAt}}</span>
+                        <span class="comment-date"></span>
                     </div>
                     <p class="comment-text">{{.Content}}</p>
                 </div>
             </div>
-            {{end}}
+   
 
-            {{if eq (len .Comments) 0}}
             <p class="no-comments">No comments yet. Be the first!</p>
-            {{end}}
 
             <div class="add-comment">
-                <form action="/post/{{.Post.ID}}/comment" method="post">
+                <form action="/post/{{.ID}}/comment" method="post">
                     <textarea name="content" placeholder="Write a comment..." required></textarea>
                     <div class="comment-submit">
                         <button type="submit" class="btn-comment-submit">Post Comment</button>

@@ -64,6 +64,10 @@ func GetOnePost(postID int) (models.Post, error) {
 	if err != nil {
 		return models.Post{}, err
 	}
+	err = DB.QueryRow("SELECT username FROM users WHERE id = ?", post.UserID).Scan(&post.Username)
+	if err != nil {
+		return models.Post{}, err
+	}
 
 	return post, nil
 }

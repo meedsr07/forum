@@ -28,8 +28,6 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	post, err := database.GetOnePost(postID)
-	fmt.Println(post)
-	fmt.Println(err)
 	if err != nil {
 		ErrorHandler(w, http.StatusText(404), 404)
 		return
@@ -40,9 +38,12 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		ErrorHandler(w, http.StatusText(500), 500)
 		return
 	}
+
 	var buff bytes.Buffer
 	if err := template.Execute(&buff, post); err != nil {
 		// If the template cannot be executed, return a generic 500 error
+		fmt.Println(post)
+		fmt.Println(err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
