@@ -21,6 +21,17 @@ func generateSessionToken() string {
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("session_token")
+
+	//  If we found a cookie AND it is not empty, the user is already logged in
+	if err == nil && cookie.Value != "" {
+		
+		// Redirect the user to the Home page ("/")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		
+		// STOP here! Do not run the rest of the code (Do not show the login page)
+		return 
+	}
 	// 1. If the user just wants to see the page (GET request)
 	if r.Method == http.MethodGet {
 		tmpl.ExecuteTemplate(w, "login.html", nil)
@@ -42,7 +53,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			// If user is not found, return an error
 			if err == sql.ErrNoRows {
-				log.Panicln("aaa")
 				w.WriteHeader(http.StatusUnauthorized) // 401 Unauthorized
 				tmpl.ExecuteTemplate(w, "login.html", map[string]interface{}{
 					"Error": "Invalid email/username or password.",

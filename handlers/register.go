@@ -21,6 +21,17 @@ func init() {
 	tmpl = template.Must(template.ParseGlob("templates/*.html"))
 }
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("session_token")
+
+	//  If we found a cookie AND it is not empty, the user is already logged in
+	if err == nil && cookie.Value != "" {
+		
+		// Redirect the user to the Home page ("/")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		
+		// STOP here! Do not run the rest of the code (Do not show the login page)
+		return 
+	}
 	// 1. If GET request: Show the register page
 	if r.Method == http.MethodGet {
 		w.WriteHeader(http.StatusOK)
