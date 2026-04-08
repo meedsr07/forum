@@ -14,6 +14,7 @@ func main() {
 	database.InitializeDB()
 	http.HandleFunc("/", handlers.HomeHandler)
 	http.HandleFunc("/Post/CreatePost", handlers.CreateNewPost)
+	http.HandleFunc("/post/", handlers.PostHandler)
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/register", handlers.RegisterHandler)
 	http.HandleFunc("/logout", handlers.LogoutHandler)
