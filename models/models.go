@@ -53,3 +53,8 @@ type PageData struct {
 	IsLoggedIn  bool
 	Username    string
 }
+
+type PostPageData struct {
+	Post     Post
+	Comments []Comment
+}

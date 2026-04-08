@@ -3,11 +3,11 @@ package handlers
 import (
 	"bytes"
 	"fmt"
+	"forum/database"
+	"forum/models"
 	"html/template"
 	"net/http"
 	"strconv"
-
-	"forum/database"
 )
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
@@ -33,16 +33,25 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	template, err := template.ParseFiles("templates/post.html")
+	comments, err := database.GetCommentsByPost(postID)
+	if err != nil {
+		ErrorHandler(w, http.StatusText(500), 500)
+		return
+	}
+
+	data := models.PostPageData{
+		Post:     post,
+		Comments: comments,
+	}
+
+	tmpl, err := template.ParseFiles("templates/post.html")
 	if err != nil {
 		ErrorHandler(w, http.StatusText(500), 500)
 		return
 	}
 
 	var buff bytes.Buffer
-	if err := template.Execute(&buff, post); err != nil {
-		// If the template cannot be executed, return a generic 500 error
-		fmt.Println(post)
+	if err := tmpl.Execute(&buff, data); err != nil {
 		fmt.Println(err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return

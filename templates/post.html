@@ -32,57 +32,61 @@
 
         <div class="post-detail-card">
             <div class="post-detail-header">
-                <div class="avatar">{{.Username}}</div>
+                <div class="avatar">{{.Post.Username}}</div>
                 <div class="post-detail-meta">
-                    <span class="post-detail-username">@{{.Username}}</span>
-                    <span class="post-detail-date">{{.CreatedAt}}</span>
+                    <span class="post-detail-username">@{{.Post.Username}}</span>
+                    <span class="post-detail-date">{{.Post.CreatedAt.Format "Jan 2, 2006"}}</span>
                 </div>
             </div>
-            <h1 class="post-detail-title">{{.Title}}</h1>
-            <p class="post-detail-content">{{.Content}}</p>
+            <h1 class="post-detail-title">{{.Post.Title}}</h1>
+            <p class="post-detail-content">{{.Post.Content}}</p>
+
             <div class="post-detail-footer">
                 <div class="vote-group">
-                    <form action="/post/{{.ID}}/like" method="post" style="display:inline;">
+                    <form action="/post/{{.Post.ID}}/like" method="post" style="display:inline;">
                         <button class="vote-btn-detail like">♥</button>
                     </form>
                     <span class="vote-num">4</span>
-                    <form action="/post/{{.ID}}/dislike" method="post" style="display:inline;">
+                    <form action="/post/{{.Post.ID}}/dislike" method="post" style="display:inline;">
                         <button class="vote-btn-detail dislike">♡</button>
                     </form>
                     <span class="vote-num dislike-num">6</span>
                 </div>
-                <span class="comment-meta">💬 NTA ADAK ZAMEL SYEB L comments</span>
+                <span class="comment-meta">💬 {{len .Comments}}</span>
             </div>
-        </div>
-        <!-- ADAK ZAMEL SYEB L comments 
-        <div class="comments-section">
-            <h3 class="comments-title">Comments</h3>
 
-           
-            <div class="comment-card">
-                <div class="comment-avatar">{{slice .Username}}</div>
-                <div class="comment-body">
-                    <div class="comment-header">
-                        <span class="comment-username">@{{.Username}}</span>
-                        <span class="comment-date"></span>
+            <div class="comments-section">
+                <h3 class="comments-title">Comments</h3>
+
+                {{if .Comments}}
+                    {{range .Comments}}
+                    <div class="comment-card">
+                        <div class="comment-avatar">{{slice .Username 0 1}}</div>
+                        <div class="comment-body">
+                            <div class="comment-header">
+                                <span class="comment-username">@{{.Username}}</span>
+                                <span class="comment-date">{{.CreatedAt.Format "Jan 2, 2006"}}</span>
+                            </div>
+                            <p class="comment-text">{{.Content}}</p>
+                        </div>
                     </div>
-                    <p class="comment-text">{{.Content}}</p>
+                    {{end}}
+                {{else}}
+                    <p class="no-comments">No comments yet. Be the first!</p>
+                {{end}}
+
+                <div class="add-comment">
+                    <form action="/comment/create" method="post">
+                        <input type="hidden" name="post_id" value="{{.Post.ID}}">
+                        <textarea name="content" placeholder="Write a comment..." required></textarea>
+                        <div class="comment-submit">
+                            <button type="submit" class="btn-comment-submit">Post Comment</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-   
-
-            <p class="no-comments">No comments yet. Be the first!</p>
-
-            <div class="add-comment">
-                <form action="/post/{{.ID}}/comment" method="post">
-                    <textarea name="content" placeholder="Write a comment..." required></textarea>
-                    <div class="comment-submit">
-                        <button type="submit" class="btn-comment-submit">Post Comment</button>
-                    </div>
-                </form>
-            </div>
         </div>
-        -->
+       
     </main>
 </div>
 
