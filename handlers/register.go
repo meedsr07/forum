@@ -7,8 +7,6 @@ import (
 	"log"
 	"net/http"
 	"regexp"
-	"strings"
-
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -97,14 +95,6 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 				"Error": "Password is too short! (8 characters minimum)",
 			})
 
-			return
-		}
-
-		if !strings.ContainsAny(password, "0123456789") {
-			w.WriteHeader(http.StatusBadRequest)
-			tmpl.ExecuteTemplate(w, "register.html", map[string]interface{}{
-				"Error": "Password must contain at least one number",
-			})
 			return
 		}
 

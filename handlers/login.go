@@ -42,6 +42,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			// If user is not found, return an error
 			if err == sql.ErrNoRows {
+				log.Panicln("aaa")
 				w.WriteHeader(http.StatusUnauthorized) // 401 Unauthorized
 				tmpl.ExecuteTemplate(w, "login.html", map[string]interface{}{
 					"Error": "Invalid email/username or password.",
