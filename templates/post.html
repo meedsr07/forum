@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/Global.css">
+    <link rel="stylesheet" href="/static/main.css">
+    <link rel="stylesheet" href="/static/navbar.css">
+    <link rel="stylesheet" href="/static/post.css">
+    <link rel="stylesheet" href="/static/categories.css">
+    <link rel="stylesheet" href="/static/postdetail.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">✦ Forum</div>
+    <div class="nav-buttons" id="navButtons">
+        <a href="/login" class="btn-login">Sign In</a>
+        <a href="/register" class="btn-register">Join Forum</a>
+    </div>
+    <div class="user-info" id="userInfo" style="display: none;">
+        <span class="username" id="usernameDisplay"></span>
+        <a href="#" id="logoutBtn" class="btn-logout">Logout</a>
+    </div>
+</nav>
+
+<div class="forum-layout">
+
+    <main class="main-content">
+        <a href="/" class="back-link">← Back to posts</a>
+
+        <div class="post-detail-card">
+            <div class="post-detail-header">
+                <div class="avatar">{{.Post.Username}}</div>
+                <div class="post-detail-meta">
+                    <span class="post-detail-username">@{{.Post.Username}}</span>
+                    <span class="post-detail-date">{{.Post.CreatedAt.Format "Jan 2, 2006"}}</span>
+                </div>
+            </div>
+            <h1 class="post-detail-title">{{.Post.Title}}</h1>
+            <p class="post-detail-content">{{.Post.Content}}</p>
+
+            <div class="post-detail-footer">
+                <div class="vote-group">
+                    <form action="/post/{{.Post.ID}}/like" method="post" style="display:inline;">
+                        <button class="vote-btn-detail like">♥</button>
+                    </form>
+                    <span class="vote-num">4</span>
+                    <form action="/post/{{.Post.ID}}/dislike" method="post" style="display:inline;">
+                        <button class="vote-btn-detail dislike">♡</button>
+                    </form>
+                    <span class="vote-num dislike-num">6</span>
+                </div>
+                <span class="comment-meta">💬 {{len .Comments}}</span>
+            </div>
+
+            <div class="comments-section">
+                <h3 class="comments-title">Comments</h3>
+
+                {{if .Comments}}
+                    {{range .Comments}}
+                    <div class="comment-card">
+                        <div class="comment-avatar">{{slice .Username 0 1}}</div>
+                        <div class="comment-body">
+                            <div class="comment-header">
+                                <span class="comment-username">@{{.Username}}</span>
+                                <span class="comment-date">{{.CreatedAt.Format "Jan 2, 2006"}}</span>
+                            </div>
+                            <p class="comment-text">{{.Content}}</p>
+                        </div>
+                    </div>
+                    {{end}}
+                {{else}}
+                    <p class="no-comments">No comments yet. Be the first!</p>
+                {{end}}
+
+                <div class="add-comment">
+                    <form action="/comment/create" method="post">
+                        <input type="hidden" name="post_id" value="{{.Post.ID}}">
+                        <textarea name="content" placeholder="Write a comment..." required></textarea>
+                        <div class="comment-submit">
+                            <button type="submit" class="btn-comment-submit">Post Comment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+       
+    </main>
+</div>
+
+</body>
+</html>

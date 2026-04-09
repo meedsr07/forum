@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+<<<<<<< HEAD
 	"fmt"
 	"os"
 	_ "github.com/mattn/go-sqlite3"
@@ -36,4 +37,22 @@ func InitDB(filepath string) (*sql.DB, error) {
 	}
 
 	return db, nil
+=======
+	"log"
+
+	_ "github.com/mattn/go-sqlite3"
+)
+
+// linking go with database
+
+var DB *sql.DB
+
+func InitializeDB() {
+	var err error
+	// open a connection betwen go and database
+	DB , err = sql.Open("sqlite3", "./forum.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+>>>>>>> origin/main
 }

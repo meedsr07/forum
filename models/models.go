@@ -46,3 +46,18 @@ type Like struct {
 	CommentID int
 	Value     int // +1 or -1
 }
+<<<<<<< HEAD
+=======
+
+// PageData is passed to the index.html template, bundling posts with auth state.
+type PageData struct {
+	Posts       []Post
+	IsLoggedIn  bool
+	Username    string
+}
+
+type PostPageData struct {
+	Post     Post
+	Comments []Comment
+}
+>>>>>>> origin/main
