@@ -1,9 +1,11 @@
 package handlers
 
 import (
-	"forum/database"
+	"fmt"
 	"net/http"
 	"strings"
+
+	"forum/database"
 )
 
 func CreateNewPost(w http.ResponseWriter, r *http.Request) {
@@ -12,12 +14,19 @@ func CreateNewPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	
-	userID, err := GetUserIDFromCookie(r)
+	cookie, err := r.Cookie("session_token")
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
+	var userID int
+	err = database.DB.QueryRow("SELECT user_id FROM user_sessions WHERE session_token = ?", cookie.Value).Scan(&userID)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+
+	}
+	fmt.Println(userID)
 	err = r.ParseForm()
 	if err != nil {
 
@@ -41,7 +50,6 @@ func CreateNewPost(w http.ResponseWriter, r *http.Request) {
 		"SELECT id FROM categories WHERE name = ?",
 		category,
 	).Scan(&categoryID)
-
 	if err != nil {
 		ErrorHandler(w, "Invalid category", http.StatusBadRequest)
 		return
@@ -57,5 +65,4 @@ func CreateNewPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
-
 }
