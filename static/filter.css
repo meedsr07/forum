@@ -20,29 +20,37 @@
 .filter-btn {
     padding: 0.625rem 1.5rem;
     border-radius: 2rem;
-    background: #f8fafc;
+    background: #2563eb;
     border: none;
     font-size: 0.813rem;
     font-weight: 600;
-    color: #5b6e8c;
+    color: white;
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
-    transition: all 0.2s;
+
+    transition: background 0.2s, color 0.2s, transform 0.1s;
 }
 
+/* Hover effect */
 .filter-btn:hover {
-    background: #eef2ff;
-    color: #2563eb;
-}
-
-.filter-btn.active {
     background: #2563eb;
-    color: white;
+    transform: translateY(-1px);
 }
 
+
+
+/* Disabled button */
 .filter-btn.disabled {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
+    filter: grayscale(30%);
 }
+
+/* Keyboard accessibility */
+.filter-btn:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+

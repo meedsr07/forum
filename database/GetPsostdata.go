@@ -30,31 +30,45 @@ func Getallpost() ([]models.Post, error) {
 	return AllPost, nil
 }
 
-func GetMyPosts(userID int) ([]models.Post, error) {
-	var UserPosts []models.Post
 
-	rows, err := DB.Query("SELECT id, user_id, Username , title, content, created_at FROM posts WHERE user_id = ?", userID)
+func GetMyPosts(userID int) ([]models.Post, error) {
+	var posts []models.Post
+
+	rows, err := DB.Query(`
+		SELECT posts.id, posts.user_id, posts.title, posts.content, posts.created_at, users.username
+		FROM posts
+		JOIN users ON posts.user_id = users.id
+		WHERE posts.user_id = ?
+		ORDER BY posts.created_at DESC
+	`, userID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		var p models.Post
-		err := rows.Scan(&p.ID, &p.UserID, &p.UserID, &p.Title, &p.Content, &p.CreatedAt)
+		var post models.Post
+		err := rows.Scan(
+			&post.ID,
+			&post.UserID,
+			&post.Title,
+			&post.Content,
+			&post.CreatedAt,
+			&post.Username, 
+		)
 		if err != nil {
 			return nil, err
 		}
-		UserPosts = append(UserPosts, p)
+		posts = append(posts, post)
 	}
 
-	return UserPosts, nil
+	return posts, nil
 }
 
 func GetOnePost(postID int) (models.Post, error) {
 	var post models.Post
 
-	err := DB.QueryRow("SELECT id, user_id, title, content, created_at FROM posts WHERE id = ?",postID,).Scan(
+	err := DB.QueryRow("SELECT id, user_id, title, content, created_at FROM posts WHERE id = ?", postID).Scan(
 		&post.ID,
 		&post.UserID,
 		&post.Title,
@@ -73,14 +87,15 @@ func GetOnePost(postID int) (models.Post, error) {
 }
 
 func GetLikedPosts(userID int) ([]models.Post, error) {
-	var LikedPosts []models.Post
+	var posts []models.Post
 
 	rows, err := DB.Query(`
-		SELECT posts.id, posts.user_id, posts.title, posts.content, posts.created_at
+		SELECT posts.id, posts.user_id, posts.title, posts.content, posts.created_at, users.username
 		FROM posts
-		JOIN post_reactions ON posts.id = post_reactions.post_id
-		WHERE post_reactions.user_id = ?
-		AND post_reactions.reaction = 1
+		JOIN likes ON posts.id = likes.post_id
+		JOIN users ON posts.user_id = users.id
+		WHERE likes.user_id = ?
+		ORDER BY posts.created_at DESC
 	`, userID)
 	if err != nil {
 		return nil, err
@@ -88,13 +103,20 @@ func GetLikedPosts(userID int) ([]models.Post, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var p models.Post
-		err := rows.Scan(&p.ID, &p.UserID, &p.Username, &p.Title, &p.Content, &p.CreatedAt)
+		var post models.Post
+		err := rows.Scan(
+			&post.ID,
+			&post.UserID,
+			&post.Title,
+			&post.Content,
+			&post.CreatedAt,
+			&post.Username, 
+		)
 		if err != nil {
 			return nil, err
 		}
-		LikedPosts = append(LikedPosts, p)
+		posts = append(posts, post)
 	}
 
-	return LikedPosts, nil
+	return posts, nil
 }

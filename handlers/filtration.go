@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"html/template"
 	"net/http"
 
@@ -19,7 +18,6 @@ func GetUserID(r *http.Request) (int, error) {
 	var userID int
 	err = database.DB.QueryRow("SELECT user_id FROM user_sessions  WHERE session_token = ?", token).Scan(&userID)
 	if err != nil {
-		fmt.Println("error ")
 		return 0, err
 	}
 	return userID, nil
@@ -45,7 +43,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		posts, err = database.GetMyPosts(userID)
 		if err != nil {
-			ErrorHandler(w, "internal server error", 500)
+			ErrorHandler(w, "internal server error 1", 500)
 			return
 		}
 
