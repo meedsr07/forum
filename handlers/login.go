@@ -78,7 +78,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		// d. Credentials are correct! Create a Session Token
 		sessionToken := generateSessionToken()
 
-		// e. Save the token in the 'sessions' table in our Database
+		// e. Save the token in the 'user_sessions' table in our Database
 		_, err = database.DB.Exec("INSERT INTO user_sessions (user_id, session_token, expires_at) VALUES (?, ?, ?)", dbID, sessionToken, time.Now().Add(24*time.Hour))
 		if err != nil {
 			log.Println("Error saving session to DB:", err)

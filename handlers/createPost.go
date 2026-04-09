@@ -13,12 +13,10 @@ func CreateNewPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	
-	var userID int
-	err := database.DB.QueryRow("SELECT user_id FROM sessions WHERE id = ?", 1).Scan(&userID)
+	userID, err := GetUserIDFromCookie(r)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
-
 	}
 	err = r.ParseForm()
 	if err != nil {

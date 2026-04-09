@@ -2,32 +2,43 @@ package handlers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
 	"forum/database"
 )
 
+// LogoutHandler handles the user logout process
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
-	// 1. Get the cookie from the user's browser
+
+	// 1. Get the session cookie from the user's browser
 	cookie, err := r.Cookie("session_token")
-	if err == nil {
-		// 2. Delete the session from the database
-		database.DB.Exec("DELETE FROM user_sessions WHERE session_token = ?", cookie.Value)
+
+	// 2. If the cookie exists, delete the session from the database
+	if err == nil && cookie.Value != "" {
+
+		query := "DELETE FROM user_sessions WHERE session_token = ?"
+		_, err := database.DB.Exec(query, cookie.Value)
+
+		if err != nil {
+			log.Println("Error deleting session from DB:", err)
+		}
 	}
 
-	// 3. Delete the cookie from the browser (by setting expiration time in the past)
-	deletedCookie := http.Cookie{
+	// 3. Create a "dead" cookie to delete the old one in the browser
+	deletedCookie := &http.Cookie{
 		Name:     "session_token",
-		Value:    "",
-		Expires:  time.Now().Add(-1 * time.Hour), // Expired 1 hour ago
-		HttpOnly: true,
-		Path:     "/",
+		Value:    "",   // Empty value
+		Path:     "/",  // Must match the original cookie path
+		MaxAge:   -1,   // -1 tells the browser to delete it immediately!
+		HttpOnly: true, // Keeps it secure from JavaScript
 	}
-	
-	http.SetCookie(w, &deletedCookie)
 
-	// 4. Send the user back to the homepage or login page
+	// 4. Send this "dead" cookie to the user's browser
+	http.SetCookie(w, deletedCookie)
+
+	// 5. Redirect the user back to the Home page ("/")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
