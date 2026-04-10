@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"forum/database"
 )
@@ -17,19 +17,18 @@ func CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	content := r.FormValue("content")
 	postIDStr := r.FormValue("post_id")
-	fmt.Println("post_id:", r.FormValue("post_id"))
-	fmt.Println("content:", r.FormValue("content"))
 	postID, err := strconv.Atoi(postIDStr)
-	if err != nil || content == "" {
-		ErrorHandler(w, http.StatusText(400), 400)
-		return
-	}
 
 	userID, err := GetUserID(r)
 	if err != nil {
-		ErrorHandler(w, http.StatusText(401), 401)
+		http.Redirect(w, r, "/login?next=/post/"+postIDStr, http.StatusSeeOther)
 		return
 	}
+	
+	if err != nil || strings.TrimSpace(content) == "" {
+		ErrorHandler(w, http.StatusText(400), 400)
+		return
+	}	
 
 	err = database.CreateComment(postID, userID, content)
 	if err != nil {

@@ -49,12 +49,14 @@ type Like struct {
 
 // PageData is passed to the index.html template, bundling posts with auth state.
 type PageData struct {
-	Posts       []Post
-	IsLoggedIn  bool
-	Username    string
+	Posts      []Post
+	IsLoggedIn bool
+	Username   string
 }
 
 type PostPageData struct {
-	Post     Post
-	Comments []Comment
+	Post       Post
+	Comments   []Comment
+	IsLoggedIn bool
+	Username   string
 }

@@ -15,20 +15,7 @@
 </head>
 <body>
 
-<nav class="navbar">
-    <div class="logo">✦ Forum</div>
-    {{ if .IsLoggedIn }}
-    <div class="user-info" id="userInfo">
-        <span class="username" id="usernameDisplay">{{ .Username }}</span>
-        <a href="/logout" id="logoutBtn" class="btn-logout">Logout</a>
-    </div>
-    {{ else }}
-    <div class="nav-buttons" id="navButtons">
-        <a href="/login" class="btn-login">Sign In</a>
-        <a href="/register" class="btn-register">Join Forum</a>
-    </div>
-    {{ end }}
-</nav>
+{{template "navbar" .}}
 
 <div class="forum-layout">
     <!-- Sidebar with Categories -->

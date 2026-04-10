@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"html/template"
 	"net/http"
 
 	"forum/database"
@@ -79,9 +78,8 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	tmpl, err := template.ParseFiles("templates/index.html")
-	if err != nil {
-		http.Error(w, "page not found", 404)
+	if err := tmpl.ExecuteTemplate(w, "index.html", pageData); err != nil {
+		ErrorHandler(w, http.StatusText(500), 500)
 		return
 	}
 	tmpl.Execute(w, pageData)

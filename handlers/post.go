@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"forum/database"
 	"forum/models"
-	"html/template"
 	"net/http"
 	"strconv"
 )
@@ -39,19 +38,22 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userID, sessionErr := GetUserID(r)
 	data := models.PostPageData{
 		Post:     post,
 		Comments: comments,
 	}
-
-	tmpl, err := template.ParseFiles("templates/post.html")
-	if err != nil {
-		ErrorHandler(w, http.StatusText(500), 500)
-		return
+	if sessionErr == nil {
+		var username string
+		dbErr := database.DB.QueryRow("SELECT username FROM users WHERE id = ?", userID).Scan(&username)
+		if dbErr == nil {
+			data.IsLoggedIn = true
+			data.Username = username
+		}
 	}
 
 	var buff bytes.Buffer
-	if err := tmpl.Execute(&buff, data); err != nil {
+	if err := tmpl.ExecuteTemplate(&buff, "post.html", data); err != nil {
 		fmt.Println(err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
