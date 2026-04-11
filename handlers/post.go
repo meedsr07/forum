@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"bytes"
-	"fmt"
 	"forum/database"
 	"forum/models"
 	"net/http"
