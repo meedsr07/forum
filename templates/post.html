@@ -22,7 +22,7 @@
 
         <div class="post-detail-card">
             <div class="post-detail-header">
-                <div class="avatar">{{.Post.Username}}</div>
+                <div class="avatar">{{slice  .Post.Username 0 1}}</div>
                 <div class="post-detail-meta">
                     <span class="post-detail-username">@{{.Post.Username}}</span>
                     <span class="post-detail-date">{{.Post.CreatedAt.Format "Jan 2, 2006"}}</span>

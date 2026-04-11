@@ -54,8 +54,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 
 	var buff bytes.Buffer
 	if err := tmpl.ExecuteTemplate(&buff, "post.html", data); err != nil {
-		fmt.Println(err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		ErrorHandler(w , "intenal srever error" , 500)
 		return
 	}
 	w.Write(buff.Bytes())
