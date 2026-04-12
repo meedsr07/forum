@@ -2,7 +2,11 @@ package handlers
 
 import (
 	"database/sql"
+	"forum/database"
 	"forum/models"
+	"html/template"
+	"net/http"
+	"strconv"
 )
 
 func GetAllCategories(db *sql.DB) ([]models.Category, error) {
@@ -80,20 +84,20 @@ func GetPostsByCategory(db *sql.DB, categoryID int) ([]models.Post, error) {
 }
 
 func FilterPostsHandler(w http.ResponseWriter, r *http.Request) {
-    categoryIDStr := r.URL.Query().Get("category_id")
+	categoryIDStr := r.URL.Query().Get("category_id")
 
-    categoryID, err := strconv.Atoi(categoryIDStr)
-    if err != nil {
-        ErrorHandler(w, "Invalid category", 400)
-        return
-    }
+	categoryID, err := strconv.Atoi(categoryIDStr)
+	if err != nil {
+		ErrorHandler(w, "Invalid category", 400)
+		return
+	}
 
-    posts, err := GetPostsByCategory(database.DB, categoryID)
-    if err != nil {
-        ErrorHandler(w, "Error loading posts", 500)
-        return
-    }
+	posts, err := GetPostsByCategory(database.DB, categoryID)
+	if err != nil {
+		ErrorHandler(w, "Error loading posts", 500)
+		return
+	}
 
-    tmpl, _ := template.ParseFiles("templates/home.html")
-    tmpl.Execute(w, posts)
+	tmpl, _ := template.ParseFiles("templates/home.html")
+	tmpl.Execute(w, posts)
 }
