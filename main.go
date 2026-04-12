@@ -1,20 +1,29 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
+	"log"
+	"net/http"
 
 	"forum/database"
+
+	"forum/handlers"
 )
 
 func main() {
-	DB, err := sql.Open("sqlite3", "./forum.db")
+	database.InitializeDB()
+	http.HandleFunc("/", handlers.HomeHandler)
+	http.HandleFunc("/Post/CreatePost", handlers.CreateNewPost)
+	http.HandleFunc("/post/", handlers.PostHandler)
+	http.HandleFunc("/comment/create", handlers.CreateCommentHandler)
+	http.HandleFunc("/login", handlers.LoginHandler)
+	http.HandleFunc("/register", handlers.RegisterHandler)
+	http.HandleFunc("/logout", handlers.LogoutHandler)
+
+	http.HandleFunc("/static/", handlers.StaticHandlers)
+	fmt.Println("server is start in http://localhost:8088")
+	err := http.ListenAndServe(":8088", nil)
 	if err != nil {
-		return
-	}
-	err1 := database.SeedDB(DB)
-	if err1 != nil {
-		fmt.Println("a")
-		return
+		log.Fatal(err)
 	}
 }

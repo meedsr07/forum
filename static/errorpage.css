@@ -1,0 +1,115 @@
+.error-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+}
+
+.error-card {
+    width: 100%;
+    max-width: 520px;
+    background: white;
+    border: 1px solid #eef2ff;
+    border-radius: 1.25rem;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+.error-badge {
+    opacity: 0;
+    animation: fadeSlide 0.8s forwards;
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.error-code {
+    opacity: 0;
+    animation: fadeSlide 0.8s 0.3s forwards;
+    font-size: clamp(3rem, 10vw, 5rem);
+    line-height: 1;
+    font-weight: 800;
+    margin: 0 0 1rem;
+    color: #0f172a;
+}
+
+.error-message {
+    opacity: 0;
+    animation: fadeSlide 0.8s 0.6s forwards;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #475569;
+    margin: 0 0 2rem;
+}
+
+.error-actions {
+    opacity: 0;
+    animation: fadeSlide 0.8s 0.8s forwards;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-error {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-error:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-error:active {
+    transform: translateY(0);
+}
+
+
+
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+@media (max-width: 480px) {
+    .error-card {
+        padding: 2rem 1.25rem;
+        border-radius: 1rem;
+    }
+
+    .error-message {
+        font-size: 0.95rem;
+    }
+
+    .btn-error {
+        width: 100%;
+        justify-content: center;
+    }
+}

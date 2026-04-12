@@ -1,56 +1,48 @@
-{{define "content"}}
-<div class="auth-container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Forum</title>
+    <link rel="stylesheet" href="/static/auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
     <div class="auth-card">
         <div class="auth-header">
             <h1>Create Account</h1>
-            <p>Join our community and start sharing</p>
+            <p>Join the community and start participating</p>
         </div>
 
-        {{if .Errors}}
-        <div class="alert alert-error">
-            {{range .Errors}}
-            <p>⚠️ {{.}}</p>
-            {{end}}
+        {{ if .Error }}
+        <div class="error-banner">
+            {{ .Error }}
         </div>
-        {{end}}
+        {{ end }}
 
-        <form action="/register" method="POST" class="auth-form" id="register-form">
+        <form action="/register" method="POST" class="auth-form">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" value="{{.Username}}"
-                       placeholder="Choose a username" required minlength="3" maxlength="30"
-                       autocomplete="username">
+                <input type="text" id="username" name="username" placeholder="johndoe" minlength="4" maxlength="20" required autofocus>
             </div>
 
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" value="{{.Email}}"
-                       placeholder="you@example.com" required
-                       autocomplete="email">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
             </div>
-
+            
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password"
-                       placeholder="At least 6 characters" required minlength="6"
-                       autocomplete="new-password">
+                <input type="password" id="password" name="password" placeholder="••••••••" minlength="8" required>
             </div>
 
-            <div class="form-group">
-                <label for="confirm_password">Confirm Password</label>
-                <input type="password" id="confirm_password" name="confirm_password"
-                       placeholder="Repeat your password" required minlength="6"
-                       autocomplete="new-password">
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block" id="register-submit">
-                Create Account
-            </button>
+            <button type="submit" class="auth-btn">Create Account</button>
         </form>
 
         <div class="auth-footer">
-            <p>Already have an account? <a href="/login">Login here</a></p>
+            <p>Already have an account? <a href="/login">Sign in</a></p>
+            <p style="margin-top: 0.5rem;"><a href="/">Return to Home</a></p>
         </div>
     </div>
-</div>
-{{end}}
+</body>
+</html>

@@ -1,0 +1,229 @@
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #5b6e8c;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.back-link:hover { color: #2563eb; }
+
+.post-detail-card {
+    background: white;
+    border-radius: 1.25rem;
+    border: 1px solid #eef2ff;
+    padding: 1.75rem;
+}
+
+.post-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.post-detail-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.post-detail-username {
+    font-weight: 600;
+    color: #2563eb;
+    font-size: 0.85rem;
+}
+
+.post-detail-date {
+    font-size: 0.72rem;
+    color: #94a3b8;
+}
+
+.post-detail-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.35;
+    margin-bottom: 1rem;
+}
+
+.post-detail-content {
+    font-size: 0.9rem;
+    color: #475569;
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+}
+
+.post-detail-footer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #eef2ff;
+}
+
+.vote-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f8fafc;
+    border: 1px solid #eef2ff;
+    border-radius: 2rem;
+    padding: 0.35rem 0.9rem;
+}
+
+.vote-btn-detail {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.15rem 0.3rem;
+    color: #64748b;
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.vote-btn-detail.like:hover { color: #e11d48; transform: scale(1.15); }
+.vote-btn-detail.dislike:hover { color: #94a3b8; transform: scale(1.15); }
+
+.vote-num {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #334155;
+    min-width: 20px;
+    text-align: center;
+}
+
+.dislike-num { color: #94a3b8; }
+
+.comment-meta {
+    font-size: 0.82rem;
+    color: #5b6e8c;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.comments-section {
+    background: white;
+    border-radius: 1.25rem;
+    border: 1px solid #eef2ff;
+    padding: 1.5rem;
+}
+
+.comments-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.comment-card {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid #f8fafc;
+}
+
+.comment-card:last-of-type { border-bottom: none; }
+
+.comment-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.comment-body { flex: 1; }
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.3rem;
+}
+
+.comment-username {
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: #0f172a;
+}
+
+.comment-date {
+    font-size: 0.7rem;
+    color: #94a3b8;
+}
+
+.comment-text {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.6;
+}
+
+.no-comments {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+.add-comment {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #f0f2f5;
+}
+
+.add-comment textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    font-family: inherit;
+    font-size: 0.875rem;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s;
+}
+
+.add-comment textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.1);
+}
+
+.comment-submit {
+    margin-top: 0.6rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-comment-submit {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: white;
+    padding: 0.5rem 1.25rem;
+    border-radius: 2rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-comment-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+}
