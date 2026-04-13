@@ -7,14 +7,19 @@ import (
 	"forum/models"
 )
 
+// Get user ID from the session token in the request cookies
+
 func GetUserID(r *http.Request) (int, error) {
+	// Get the cookie named session_token from the user's request
 	cookie, err := r.Cookie("session_token")
 	if err != nil {
 		return 0, err
 	}
+	// take the value of the cookie
 	token := cookie.Value
 
 	var userID int
+	// Query the database to find the user_id associated with the session_token
 	err = database.DB.QueryRow("SELECT user_id FROM user_sessions  WHERE session_token = ?", token).Scan(&userID)
 	if err != nil {
 		return 0, err
@@ -23,12 +28,8 @@ func GetUserID(r *http.Request) (int, error) {
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
-		ErrorHandler(w, http.StatusText(404), 404)
-		return
-	}
-
 	userID, sessionErr := GetUserID(r)
+	// get the filter query parameter from the URL
 	filter := r.URL.Query().Get("filter")
 
 	var posts []models.Post
@@ -37,6 +38,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	switch filter {
 	case "myposts":
 		if sessionErr != nil {
+			// If the user is not logged in, redirect them to the login page
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
@@ -48,6 +50,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "liked":
 		if sessionErr != nil {
+			// If the user is not logged in, redirect them to the login page
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
@@ -56,7 +59,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 			ErrorHandler(w, "internal server error", 500)
 			return
 		}
-
+		// default case: show all posts
 	default:
 		posts, err = database.Getallpost()
 		if err != nil {
@@ -65,22 +68,27 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Build auth state for the navbar
+	// Create a PageData struct to pass to the template
 	pageData := models.PageData{
 		Posts: posts,
 	}
+	// If the user is logged in, IsLoggedIn == true and get the username
 	if sessionErr == nil {
 		var username string
+		// slect the username from the users table by userID
 		dbErr := database.DB.QueryRow("SELECT username FROM users WHERE id = ?", userID).Scan(&username)
+		// if we found the username, set IsLoggedIn to true and pass the username to the struct
 		if dbErr == nil {
 			pageData.IsLoggedIn = true
 			pageData.Username = username
 		}
 	}
-
-	if err := tmpl.ExecuteTemplate(w, "index.html", pageData); err != nil {
+	// Execute the template with the pageData struct
+	tmpl.ExecuteTemplate(w, "index.html", pageData)
+	if err != nil {
 		ErrorHandler(w, http.StatusText(500), 500)
 		return
 	}
+
 	tmpl.Execute(w, pageData)
 }
