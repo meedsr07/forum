@@ -25,12 +25,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	//  If we found a cookie AND it is not empty, the user is already logged in
 	if err == nil && cookie.Value != "" {
-		
+
 		// Redirect the user to the Home page ("/")
 		http.Redirect(w, r, "/", http.StatusSeeOther)
-		
+
 		// STOP here! Do not run the rest of the code (Do not show the login page)
-		return 
+		return
 	}
 	// 1. If the user just wants to see the page (GET request)
 	if r.Method == http.MethodGet {
@@ -75,6 +75,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// delete old sessions
+		deleteQuery := "DELETE FROM user_sessions WHERE user_id = ?"
+		_, err = database.DB.Exec(deleteQuery, dbID)
+		if err != nil {
+			log.Println("Error deleting old sessions:", err)
+		}
 		// d. Credentials are correct! Create a Session Token
 		sessionToken := generateSessionToken()
 

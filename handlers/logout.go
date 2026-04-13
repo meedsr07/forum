@@ -22,7 +22,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		_, err := database.DB.Exec(query, cookie.Value)
 
 		if err != nil {
-			log.Println("Error deleting session from DB:", err)
+			log.Println("Error deleting sessijhon from DB:", err)
 		}
 	}
 
