@@ -2,11 +2,14 @@ package handlers
 
 import (
 	"database/sql"
+	"fmt"
 	"forum/database"
 	"html/template"
 	"log"
 	"net/http"
 	"regexp"
+	"time"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -18,19 +21,39 @@ var (
 var tmpl *template.Template
 
 func init() {
-	tmpl = template.Must(template.ParseGlob("templates/*.html"))
+    tmpl = template.Must(
+        template.New("").Funcs(template.FuncMap{
+            "timeAgo": timeAgo,
+        }).ParseGlob("templates/*.html"),
+    )
 }
+
+func timeAgo(t time.Time) string {
+	duration := time.Since(t)
+
+	if duration < time.Minute {
+		return "just now"
+	}
+	if duration < time.Hour {
+		return fmt.Sprintf("%d minutes ago", int(duration.Minutes()))
+	}
+	if duration < 24*time.Hour {
+		return fmt.Sprintf("%d hours ago", int(duration.Hours()))
+	}
+	return fmt.Sprintf("%d days ago", int(duration.Hours()/24))
+}
+
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session_token")
 
 	//  If we found a cookie AND it is not empty, the user is already logged in
 	if err == nil && cookie.Value != "" {
-		
+
 		// Redirect the user to the Home page ("/")
 		http.Redirect(w, r, "/", http.StatusSeeOther)
-		
+
 		// STOP here! Do not run the rest of the code (Do not show the login page)
-		return 
+		return
 	}
 	// 1. If GET request: Show the register page
 	if r.Method == http.MethodGet {

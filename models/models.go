@@ -22,8 +22,8 @@ type Post struct {
 	Username  string // joined from users
 	Title     string
 	Content   string
-	Category string // joined from categories 
 	CreatedAt time.Time
+	Category string // joined from categories 
 }
 
 type Comment struct {
