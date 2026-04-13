@@ -54,10 +54,25 @@ func CreateNewPost(w http.ResponseWriter, r *http.Request) {
 		ErrorHandler(w, "Invalid category", http.StatusBadRequest)
 		return
 	}
+	PosT, err := database.DB.Exec(
+		`INSERT INTO posts (user_id, title, content)
+	 VALUES (?, ?, ?)`,
+		userID, title, content,
+	)
+	if err != nil {
+		ErrorHandler(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	PostID, err := PosT.LastInsertId()
+	if err != nil {
+		ErrorHandler(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
 	_, err = database.DB.Exec(
-		`INSERT INTO posts (user_id, title, content, category_id)
-	 VALUES (?, ?, ?, ?)`,
-		userID, title, content, categoryID,
+		`INSERT INTO post_categories (post_id ,category_id)
+	 VALUES (?, ?)`,
+		PostID, categoryID,
 	)
 	if err != nil {
 		ErrorHandler(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
