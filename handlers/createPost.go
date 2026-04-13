@@ -1,8 +1,8 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"forum/database"
@@ -10,53 +10,57 @@ import (
 
 func CreateNewPost(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		ErrorHandler(w, http.StatusText(405), 405)
+		ErrorHandler(w, http.StatusText(404), 404)
 		return
 	}
 
-	// Must be logged in
-	userID, err := GetUserID(r)
+	cookie, err := r.Cookie("session_token")
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
+	var userID int
+	err = database.DB.QueryRow("SELECT user_id FROM user_sessions WHERE session_token = ?", cookie.Value).Scan(&userID)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
 
-	if err := r.ParseForm(); err != nil {
-		ErrorHandler(w, "Bad Request", http.StatusBadRequest)
+	}
+	fmt.Println(userID)
+	err = r.ParseForm()
+	if err != nil {
+
+		ErrorHandler(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+
+		return
+	}
+	title := r.FormValue("title")
+	content := r.FormValue("content")
+	category := r.FormValue("category")
+	title = strings.TrimSpace(title)
+	content = strings.TrimSpace(content)
+	category = strings.TrimSpace(category)
+	if title == "" || content == "" || category == "" || len(title) > 200 || len(content) > 4096 {
+		ErrorHandler(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
 
-	title := strings.TrimSpace(r.FormValue("title"))
-	content := strings.TrimSpace(r.FormValue("content"))
-	categoryStr := r.FormValue("category")
-
-	// Validate fields
-	if title == "" || content == "" || categoryStr == "" {
-		ErrorHandler(w, "Title, content, and category are required", http.StatusBadRequest)
-		return
-	}
-
-	// Convert category to int
-	categoryID, err := strconv.Atoi(categoryStr)
-	if err != nil || categoryID < 1 {
+	var categoryID int
+	err = database.DB.QueryRow(
+		"SELECT id FROM categories WHERE name = ?",
+		category,
+	).Scan(&categoryID)
+	if err != nil {
 		ErrorHandler(w, "Invalid category", http.StatusBadRequest)
 		return
 	}
-
-	// Verify category exists
-	exists, err := database.CategoryExists(categoryID)
-	if err != nil || !exists {
-		ErrorHandler(w, "Category not found", http.StatusBadRequest)
-		return
-	}
-
-	// Insert the post
 	_, err = database.DB.Exec(
-		`INSERT INTO posts (user_id, title, content, category_id) VALUES (?, ?, ?, ?)`,
+		`INSERT INTO posts (user_id, title, content, category_id)
+	 VALUES (?, ?, ?, ?)`,
 		userID, title, content, categoryID,
 	)
 	if err != nil {
-		ErrorHandler(w, http.StatusText(500), http.StatusInternalServerError)
+		ErrorHandler(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 
