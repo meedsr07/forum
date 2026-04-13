@@ -28,6 +28,11 @@ func GetUserID(r *http.Request) (int, error) {
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
+	// Check if the URL path is not "/"
+	if r.URL.Path != "/" {
+		ErrorHandler(w, http.StatusText(404), 404)
+		return
+	}
 	userID, sessionErr := GetUserID(r)
 	// get the filter query parameter from the URL
 	filter := r.URL.Query().Get("filter")
