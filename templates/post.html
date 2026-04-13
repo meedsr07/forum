@@ -25,22 +25,30 @@
                 <div class="avatar">{{slice  .Post.Username 0 1}}</div>
                 <div class="post-detail-meta">
                     <span class="post-detail-username">@{{.Post.Username}}</span>
-                    <span class="post-detail-date">{{.Post.CreatedAt.Format "Jan 2, 2006"}}</span>
+                    <span class="post-detail-date">{{timeAgo .Post.CreatedAt}}</span>
                 </div>
             </div>
+            {{if .Post.Category}}<span class="post-category-badge">{{.Post.Category}}</span>{{end}}
             <h1 class="post-detail-title">{{.Post.Title}}</h1>
             <p class="post-detail-content">{{.Post.Content}}</p>
 
             <div class="post-detail-footer">
                 <div class="vote-group">
-                    <form action="/post/{{.Post.ID}}/like" method="post" style="display:inline;">
-                        <button class="vote-btn-detail like">♥</button>
+                    {{if .IsLoggedIn}}
+                    <form action="/like" method="post" style="display:inline;">
+                        <input type="hidden" name="post_id" value="{{.Post.ID}}">
+                        <input type="hidden" name="value" value="1">
+                        <button class="vote-btn-detail like" type="submit">👍 {{.Post.Likes}}</button>
                     </form>
-                    <span class="vote-num">4</span>
-                    <form action="/post/{{.Post.ID}}/dislike" method="post" style="display:inline;">
-                        <button class="vote-btn-detail dislike">♡</button>
+                    <form action="/like" method="post" style="display:inline;">
+                        <input type="hidden" name="post_id" value="{{.Post.ID}}">
+                        <input type="hidden" name="value" value="-1">
+                        <button class="vote-btn-detail dislike" type="submit">👎 {{.Post.Dislikes}}</button>
                     </form>
-                    <span class="vote-num dislike-num">6</span>
+                    {{else}}
+                    <span class="vote-btn-detail like">👍 {{.Post.Likes}}</span>
+                    <span class="vote-btn-detail dislike">👎 {{.Post.Dislikes}}</span>
+                    {{end}}
                 </div>
                 <span class="comment-meta">💬 {{len .Comments}}</span>
             </div>
@@ -55,7 +63,7 @@
                         <div class="comment-body">
                             <div class="comment-header">
                                 <span class="comment-username">@{{.Username}}</span>
-                                <span class="comment-date">{{.CreatedAt.Format "Jan 2, 2006"}}</span>
+                                <span class="comment-date">{{timeAgo .CreatedAt}}</span>
                             </div>
                             <p class="comment-text">{{.Content}}</p>
                         </div>

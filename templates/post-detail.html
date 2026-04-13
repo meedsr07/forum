@@ -23,18 +23,17 @@
         <!-- Post voting -->
         <div class="vote-section">
             {{if $.User}}
-            <form action="/like" method="POST" class="vote-form">
-                <input type="hidden" name="post_id" value="{{.Post.ID}}">
-                <button type="submit" class="vote-btn {{if eq $.UserPostVote 1}}vote-active{{end}}" title="Like">
-                    👍 <span>{{.Post.Likes}}</span>
-                </button>
-            </form>
-            <form action="/dislike" method="POST" class="vote-form">
-                <input type="hidden" name="post_id" value="{{.Post.ID}}">
-                <button type="submit" class="vote-btn vote-btn-dislike {{if eq $.UserPostVote -1}}vote-active-dislike{{end}}" title="Dislike">
-                    👎 <span>{{.Post.Dislikes}}</span>
-                </button>
-            </form>
+     <form method="POST" action="/like">
+    <input type="hidden" name="post_id" value="{{.ID}}">
+    <input type="hidden" name="value" value="1">
+    <button type="submit">👍 {{.Likes}}</button>
+</form>
+
+<form method="POST" action="/like">
+    <input type="hidden" name="post_id" value="{{.ID}}">
+    <input type="hidden" name="value" value="-1">
+    <button type="submit">👎 {{.Dislikes}}</button>
+</form>
             {{else}}
             <span class="vote-btn vote-btn-disabled" title="Login to vote">👍 <span>{{.Post.Likes}}</span></span>
             <span class="vote-btn vote-btn-disabled" title="Login to vote">👎 <span>{{.Post.Dislikes}}</span></span>

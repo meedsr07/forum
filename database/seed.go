@@ -39,43 +39,26 @@ func SeedDB(db *sql.DB) error {
 
 	// ── Posts ──────────────────────────────────────────────────────────────
 	posts := []struct {
-		userID  int
-		title   string
-		content string
+		userID     int
+		title      string
+		content    string
+		categoryID int
 	}{
-		{1, "Welcome to the Forum!", "Hey everyone, glad to have you here. Feel free to post anything."},
-		{2, "Best programming languages in 2024", "I think Go is underrated. What do you all think?"},
-		{1, "Anyone else watching the new season?", "Just finished episode 3, no spoilers but wow."},
-		{3, "Cool science fact of the day", "Did you know honey never expires? Found 3000 year old honey in Egypt."},
-		{4, "Recommend me a game", "Looking for something chill to play on weekends. Any suggestions?"},
-		{2, "Go vs Rust – which one to learn?", "I've been going back and forth. Both seem awesome for systems programming."},
+		{1, "Welcome to the Forum!", "Hey everyone, glad to have you here. Feel free to post anything.", 1},       // General
+		{2, "Best programming languages in 2024", "I think Go is underrated. What do you all think?", 2},           // Tech
+		{1, "Anyone else watching the new season?", "Just finished episode 3, no spoilers but wow.", 4},            // Movies
+		{3, "Cool science fact of the day", "Did you know honey never expires? Found 3000 year old honey in Egypt.", 5}, // Science
+		{4, "Recommend me a game", "Looking for something chill to play on weekends. Any suggestions?", 3},         // Gaming
+		{2, "Go vs Rust – which one to learn?", "I've been going back and forth. Both seem awesome for systems programming.", 2}, // Tech
 	}
 	for _, p := range posts {
 		_, err := db.Exec(
-			`INSERT OR IGNORE INTO posts (user_id, title, content) VALUES (?, ?, ?)`,
-			p.userID, p.title, p.content,
+			`INSERT OR IGNORE INTO posts (user_id, title, content, category_id) VALUES (?, ?, ?, ?)`,
+			p.userID, p.title, p.content, p.categoryID,
 		)
 		if err != nil {
 			return err
 		}
-	}
-
-	// ── Post ↔ Category links ──────────────────────────────────────────────
-	// post_id → category_id  (using the order we inserted above)
-	postCats := [][2]int{
-		{1, 1}, // Welcome → General
-		{2, 2}, // Programming → Tech
-		{3, 4}, // Season → Movies
-		{4, 5}, // Science fact → Science
-		{5, 3}, // Game rec → Gaming
-		{6, 2}, // Go vs Rust → Tech
-		{5, 1}, // Game rec also in General
-	}
-	for _, pc := range postCats {
-		db.Exec(
-			`INSERT OR IGNORE INTO post_categories (post_id, category_id) VALUES (?, ?)`,
-			pc[0], pc[1],
-		)
 	}
 
 	// ── Comments ───────────────────────────────────────────────────────────

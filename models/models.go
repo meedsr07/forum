@@ -22,6 +22,8 @@ type Post struct {
 	Username  string // joined from users
 	Title     string
 	Content   string
+	Likes     int
+	Dislikes  int
 	CreatedAt time.Time
 	Category string // joined from categories 
 }

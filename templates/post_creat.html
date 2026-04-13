@@ -35,8 +35,7 @@
                 <div class="checkbox-group" id="categories-group">
                     {{range .Categories}}
                     <label class="checkbox-label" for="cat-{{.ID}}">
-                        <input type="checkbox" id="cat-{{.ID}}" name="categories" value="{{.ID}}">
-                        <span class="checkbox-text">{{.Name}}</span>
+                    <input type="radio" name="category" value="{{.ID}}">                        <span class="checkbox-text">{{.Name}}</span>
                     </label>
                     {{end}}
                 </div>
