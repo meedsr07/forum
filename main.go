@@ -21,8 +21,8 @@ func main() {
 	http.HandleFunc("/logout", handlers.LogoutHandler)
 	http.HandleFunc("/like/", handlers.Likehandler)
 	http.HandleFunc("/dislike/", handlers.DisLikehandler)
-	http.HandleFunc("/comment/like/", handlers.Likehandler)
-	http.HandleFunc("/comment/dislike/", handlers.DisLikehandler)
+	http.HandleFunc("/comment/like/", handlers.Likecommenthandler)
+	http.HandleFunc("/comment/dislike/", handlers.DisLikecommenthandler)
 
 
 	http.HandleFunc("/static/", handlers.StaticHandlers)

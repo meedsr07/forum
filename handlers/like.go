@@ -59,6 +59,8 @@ func Likecommenthandler(w http.ResponseWriter, r *http.Request) {
 		ErrorHandler(w, http.StatusText(404), 404)
 		return
 	}
+		postIDStr := r.URL.Query().Get("PostId")
+
 	// Must be logged in
 	userID, err := GetUserID(r)
 	if err != nil {
@@ -71,10 +73,9 @@ func Likecommenthandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := database.HandleVote(userID, commentID, 1); err != nil {
+	if err := database.HandleVotecomment(userID, commentID, 1); err != nil {
 		ErrorHandler(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
-	commentIDStr := strconv.Itoa(commentID)
-	http.Redirect(w, r, "/post/"+commentIDStr, http.StatusSeeOther)
+	http.Redirect(w, r, "/post/"+postIDStr, http.StatusSeeOther)
 }

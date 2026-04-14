@@ -59,16 +59,17 @@ type PageData struct {
 	Username   string
 }
 
-type PostPageData struct {
-	Post           Post
-	Comments       []Comment
-	IsLoggedIn     bool
-	Username       string
-	Likes          int
-	Dislikes       int
-	CommentVotes map[int]struct {
-		Likes    int
-		Dislikes int
-	}
+type VoteCount struct {
+	Likes    int
+	Dislikes int
+}
 
+type PostPageData struct {
+	Post         Post
+	Comments     []Comment
+	IsLoggedIn   bool
+	Username     string
+	Likes        int
+	Dislikes     int
+	CommentVotes map[int]VoteCount
 }

@@ -52,22 +52,29 @@
                     {{range .Comments}}
                     <div class="comment-card">
                         <div class="comment-avatar">{{slice .Username 0 1}}</div>
-                                <div class="vote-group">
-                    <form action="/comment/like/{{.Comments.ID}}" method="post" style="display:inline;">
-                        <button class="vote-btn-detail like">♥</button>
-                    </form>
-                    <span class="vote-num">{{.Likes}}</span>
-                    <form action="/comment/dislike/{{.Comments.ID}}" method="post" style="display:inline;">
-                        <button class="vote-btn-detail dislike">♡</button>
-                    </form>
-                    <span class="vote-num dislike-num">{{.Dislikes}}</span>
-                </div>
+                            
                         <div class="comment-body">
                             <div class="comment-header">
                                 <span class="comment-username">@{{.Username}}</span>
                                 <span class="comment-date">{{.CreatedAt.Format "Jan 2, 2006"}}</span>
                             </div>
                             <p class="comment-text">{{.Content}}</p>
+                        </div>
+                        <div class="vote-group">
+
+                            <form action="/comment/like/{{.ID}}?postid={{$.Post.ID}}" method="post">
+                                <button class="vote-btn-detail like">♥</button>
+                            </form>
+
+                            {{with (index $.CommentVotes .ID)}}
+                                <span class="vote-num">{{.Likes}}</span>
+                                <span class="vote-num">{{.Dislikes}}</span>
+                            {{end}}
+
+                            <form action="/comment/dislike/{{.ID}}?postid={{$.Post.ID}}" method="post">
+                                <button class="vote-btn-detail dislike">♡</button>
+                            </form>
+
                         </div>
                     </div>
                     {{end}}

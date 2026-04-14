@@ -34,34 +34,29 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 
 	comments, err := database.GetCommentsByPost(postID)
 	if err != nil {
+
 		ErrorHandler(w, http.StatusText(500), 500)
 		return
 	}
 
 	Likess, Dislikess := database.GetPostVotes(postID)
-	
-	commentVotes := make(map[int]struct {
-		Likes    int
-		Dislikes int
-	})
+
+	commentVotes := make(map[int]models.VoteCount)
 
 	for _, c := range comments {
 		likes, dislikes := database.GetCommentVotes(c.ID)
-
-		commentVotes[c.ID] = struct {
-			Likes    int
-			Dislikes int
-		}{
+		commentVotes[c.ID] = models.VoteCount{
 			Likes:    likes,
 			Dislikes: dislikes,
 		}
 	}
 	userID, sessionErr := GetUserID(r)
 	data := models.PostPageData{
-		Post:     post,
-		Comments: comments,
-		Likes:    Likess,
-		Dislikes: Dislikess,
+		Post:         post,
+		Comments:     comments,
+		Likes:        Likess,
+		Dislikes:     Dislikess,
+		CommentVotes: commentVotes,
 	}
 	if sessionErr == nil {
 		var username string

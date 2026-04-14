@@ -43,7 +43,6 @@ func DisLikehandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/post/"+postIDStr, http.StatusSeeOther)
 }
 
-
 func DisLikecommenthandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		ErrorHandler(w, http.StatusText(405), 405)
@@ -54,7 +53,7 @@ func DisLikecommenthandler(w http.ResponseWriter, r *http.Request) {
 		ErrorHandler(w, http.StatusText(404), 404)
 		return
 	}
-
+	postIDStr := r.URL.Query().Get("PostId")
 	commentID, err := strconv.Atoi(path[17:])
 	if err != nil || commentID < 0 {
 		ErrorHandler(w, http.StatusText(404), 404)
@@ -72,10 +71,10 @@ func DisLikecommenthandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := database.HandleVote(userID, commentID, 1); err != nil {
+	if err := database.HandleVotecomment(userID, commentID, -1); err != nil {
 		ErrorHandler(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
-	commentIDStr := strconv.Itoa(commentID)
-	http.Redirect(w, r, "/post/"+commentIDStr, http.StatusSeeOther)
+	
+	http.Redirect(w, r, "/post/"+postIDStr, http.StatusSeeOther)
 }

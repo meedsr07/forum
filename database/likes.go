@@ -41,3 +41,39 @@ func HandleVote(userID, postID, value int) error {
 	)
 	return err
 }
+
+func HandleVotecomment(userID, commentID, value int) error {
+	var existingValue int
+	err := DB.QueryRow(
+		`SELECT value FROM likes WHERE user_id = ? AND comment_id= ?`,
+		userID, commentID,
+	).Scan(&existingValue)
+
+	if err == sql.ErrNoRows {
+		// No previous vote — insert new one
+		_, err = DB.Exec(
+			`INSERT INTO likes (user_id, comment_id, value) VALUES (?, ?, ?)`,
+			userID, commentID, value,
+		)
+		return err
+	}
+	if err != nil {
+		return err
+	}
+
+	if existingValue == value {
+		// Same vote — toggle off (delete)
+		_, err = DB.Exec(
+			`DELETE FROM likes WHERE user_id = ? AND comment_id = ?`,
+			userID, commentID,
+		)
+		return err
+	}
+
+	// Opposite vote — switch
+	_, err = DB.Exec(
+		`UPDATE likes SET value = ? WHERE user_id = ? AND comment_id = ?`,
+		value, userID, commentID,
+	)
+	return err
+}
