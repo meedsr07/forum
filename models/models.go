@@ -26,8 +26,8 @@ type Post struct {
 }
 
 type Post_Categories struct {
-	Post_id  int
-    Category_id int
+	Post_id     int
+	Category_id int
 }
 type Comment struct {
 	ID        int
@@ -54,16 +54,21 @@ type Like struct {
 // PageData is passed to the index.html template, bundling posts with auth state.
 type PageData struct {
 	Posts      []Post
-	Category      []Category
+	Category   []Category
 	IsLoggedIn bool
 	Username   string
 }
 
 type PostPageData struct {
-	Post       Post
-	Comments   []Comment
-	IsLoggedIn bool
-	Username   string
-	Likes      int
-	Dislikes   int
+	Post           Post
+	Comments       []Comment
+	IsLoggedIn     bool
+	Username       string
+	Likes          int
+	Dislikes       int
+	CommentVotes map[int]struct {
+		Likes    int
+		Dislikes int
+	}
+
 }

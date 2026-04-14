@@ -19,7 +19,11 @@ func main() {
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/register", handlers.RegisterHandler)
 	http.HandleFunc("/logout", handlers.LogoutHandler)
-	http.HandleFunc("", handlers.Likehandler)
+	http.HandleFunc("/like/", handlers.Likehandler)
+	http.HandleFunc("/dislike/", handlers.DisLikehandler)
+	http.HandleFunc("/comment/like/", handlers.Likehandler)
+	http.HandleFunc("/comment/dislike/", handlers.DisLikehandler)
+
 
 	http.HandleFunc("/static/", handlers.StaticHandlers)
 	fmt.Println("server is start in http://localhost:8088")

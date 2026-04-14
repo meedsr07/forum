@@ -7,20 +7,20 @@ import (
 	"forum/database"
 )
 
-func Likehandler(w http.ResponseWriter, r *http.Request) {
+func DisLikehandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		ErrorHandler(w, http.StatusText(405), 405)
 		return
 	}
 	path := r.URL.Path
-	if len(path) < 6 || path[:6] != "/like/" {
-		ErrorHandler(w, http.StatusText(404), 404)
+	if len(path) < 9 || path[:9] != "/dislike/" {
+		ErrorHandler(w, http.StatusText(500), 500)
 		return
 	}
 
-	postID, err := strconv.Atoi(path[6:])
+	postID, err := strconv.Atoi(path[9:])
 	if err != nil || postID < 0 {
-		ErrorHandler(w, http.StatusText(404), 404)
+		ErrorHandler(w, http.StatusText(300), 300)
 		return
 	}
 	// Must be logged in
@@ -35,7 +35,7 @@ func Likehandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := database.HandleVote(userID, postID, 1); err != nil {
+	if err := database.HandleVote(userID, postID, -1); err != nil {
 		ErrorHandler(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
@@ -43,18 +43,19 @@ func Likehandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/post/"+postIDStr, http.StatusSeeOther)
 }
 
-func Likecommenthandler(w http.ResponseWriter, r *http.Request) {
+
+func DisLikecommenthandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		ErrorHandler(w, http.StatusText(405), 405)
 		return
 	}
 	path := r.URL.Path
-	if len(path) < 14 || path[:14] != "/comment/like/" {
+	if len(path) < 17 || path[:17] != "/comment/dislike/" {
 		ErrorHandler(w, http.StatusText(404), 404)
 		return
 	}
 
-	commentID, err := strconv.Atoi(path[14:])
+	commentID, err := strconv.Atoi(path[17:])
 	if err != nil || commentID < 0 {
 		ErrorHandler(w, http.StatusText(404), 404)
 		return

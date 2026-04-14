@@ -203,3 +203,18 @@ func CategoryExists(categoryID int) (bool, error) {
 	}
 	return true, nil
 }
+
+func GetCommentVotes(commentID int) (int, int) {
+	var likes, dislikes int
+
+	DB.QueryRow(`
+		SELECT 
+			COALESCE(SUM(CASE WHEN value = 1 THEN 1 END),0),
+			COALESCE(SUM(CASE WHEN value = -1 THEN 1 END),0)
+		FROM likes
+		WHERE comment_id=?`,
+		commentID,
+	).Scan(&likes, &dislikes)
+
+	return likes, dislikes
+}

@@ -43,3 +43,4 @@ func GetCommentsByPost(postID int) ([]models.Comment, error) {
 	}
 	return comments, rows.Err()
 }
+

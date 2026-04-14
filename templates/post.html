@@ -22,7 +22,7 @@
 
         <div class="post-detail-card">
             <div class="post-detail-header">
-                <div class="avatar">{{slice  .Post.Username 0 1}}</div>
+                <div class="avatar">{{slice  .Post.Username}}</div>
                 <div class="post-detail-meta">
                     <span class="post-detail-username">@{{.Post.Username}}</span>
                     <span class="post-detail-date">{{.Post.CreatedAt.Format "Jan 2, 2006"}}</span>
@@ -33,14 +33,14 @@
 
             <div class="post-detail-footer">
                 <div class="vote-group">
-                    <form action="/post/{{.Post.ID}}/like" method="post" style="display:inline;">
+                    <form action="/like/{{.Post.ID}}" method="post" style="display:inline;">
                         <button class="vote-btn-detail like">♥</button>
                     </form>
-                    <span class="vote-num">4</span>
-                    <form action="/post/{{.Post.ID}}/dislike" method="post" style="display:inline;">
+                    <span class="vote-num">{{.Likes}}</span>
+                    <form action="/dislike/{{.Post.ID}}" method="post" style="display:inline;">
                         <button class="vote-btn-detail dislike">♡</button>
                     </form>
-                    <span class="vote-num dislike-num">6</span>
+                    <span class="vote-num dislike-num">{{.Dislikes}}</span>
                 </div>
                 <span class="comment-meta">💬 {{len .Comments}}</span>
             </div>
@@ -52,6 +52,16 @@
                     {{range .Comments}}
                     <div class="comment-card">
                         <div class="comment-avatar">{{slice .Username 0 1}}</div>
+                                <div class="vote-group">
+                    <form action="/comment/like/{{.Comments.ID}}" method="post" style="display:inline;">
+                        <button class="vote-btn-detail like">♥</button>
+                    </form>
+                    <span class="vote-num">{{.Likes}}</span>
+                    <form action="/comment/dislike/{{.Comments.ID}}" method="post" style="display:inline;">
+                        <button class="vote-btn-detail dislike">♡</button>
+                    </form>
+                    <span class="vote-num dislike-num">{{.Dislikes}}</span>
+                </div>
                         <div class="comment-body">
                             <div class="comment-header">
                                 <span class="comment-username">@{{.Username}}</span>
