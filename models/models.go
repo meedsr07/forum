@@ -25,6 +25,10 @@ type Post struct {
 	CreatedAt time.Time
 }
 
+type Post_Categories struct {
+	Post_id  int
+    Category_id int
+}
 type Comment struct {
 	ID        int
 	PostID    int
@@ -50,6 +54,7 @@ type Like struct {
 // PageData is passed to the index.html template, bundling posts with auth state.
 type PageData struct {
 	Posts      []Post
+	Category      []Category
 	IsLoggedIn bool
 	Username   string
 }
@@ -59,4 +64,6 @@ type PostPageData struct {
 	Comments   []Comment
 	IsLoggedIn bool
 	Username   string
+	Likes      int
+	Dislikes   int
 }

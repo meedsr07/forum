@@ -25,30 +25,13 @@
                 <h3>📂 Categories</h3>
             </div>
             <ul class="categories-list">
+                {{range .Category}}
                 <li>
-                    <a href="#" data-cat="all" class="cat-link active" id="sidebarCatAll">
-                        <span class="cat-icon">🗂️</span>
-                        <span>All Topics</span>
+                    <a href="/?category={{.ID}}" class="cat-link">
+                        <span>{{.Name}}</span>
                     </a>
                 </li>
-                <li>
-                    <a href="#" data-cat="Technology" class="cat-link" id="sidebarCatTech">
-                        <span class="cat-icon">💻</span>
-                        <span>Technology</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" data-cat="General" class="cat-link" id="sidebarCatGeneral">
-                        <span class="cat-icon">💬</span>
-                        <span>General</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" data-cat="Help" class="cat-link" id="sidebarCatHelp">
-                        <span class="cat-icon">🆘</span>
-                        <span>Help & Support</span>
-                    </a>
-                </li>
+                {{end}}
             </ul>
         </div>
     </aside>
@@ -109,9 +92,9 @@
     >
 
     <select id="postCategory" name="category">
-        <option value="Technology">💻 Technology</option>
-        <option value="General">💬 General</option>
-        <option value="Help">🆘 Help & Support</option>
+        {{range .Category}}
+            <option value="{{.Name}}">{{.Name}}</option>
+        {{end}}
     </select>
 
     <textarea

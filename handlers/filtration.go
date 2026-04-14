@@ -35,6 +35,13 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	userID, sessionErr := GetUserID(r)
 	// get the filter query parameter from the URL
+	// ------------------------- walid ---------------------------
+	category := r.URL.Query().Get("category")
+	if category != "" {
+		FilterPostsHandler(w , r, category)
+		return
+	}
+	// ------------------------- end walid ---------------------------
 	filter := r.URL.Query().Get("filter")
 
 	var posts []models.Post
@@ -88,6 +95,9 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 			pageData.Username = username
 		}
 	}
+	///  ----------------- walid --------------------------------
+	pageData.Category, err = database.GetAllCategories()
+	///  ----------------- walid --------------------------------
 	// Execute the template with the pageData struct
 	tmpl.ExecuteTemplate(w, "index.html", pageData)
 	if err != nil {

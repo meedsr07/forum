@@ -1,6 +1,8 @@
 package database
 
 import (
+	"fmt"
+
 	"forum/models"
 )
 
@@ -30,7 +32,6 @@ func Getallpost() ([]models.Post, error) {
 	return AllPost, nil
 }
 
-
 func GetMyPosts(userID int) ([]models.Post, error) {
 	var posts []models.Post
 
@@ -54,7 +55,7 @@ func GetMyPosts(userID int) ([]models.Post, error) {
 			&post.Title,
 			&post.Content,
 			&post.CreatedAt,
-			&post.Username, 
+			&post.Username,
 		)
 		if err != nil {
 			return nil, err
@@ -110,7 +111,7 @@ func GetLikedPosts(userID int) ([]models.Post, error) {
 			&post.Title,
 			&post.Content,
 			&post.CreatedAt,
-			&post.Username, 
+			&post.Username,
 		)
 		if err != nil {
 			return nil, err
@@ -119,4 +120,86 @@ func GetLikedPosts(userID int) ([]models.Post, error) {
 	}
 
 	return posts, nil
+}
+
+// ------------------------------------------------ walid
+
+// GetPostVotes returns the like and dislike count for a given post.
+func GetPostVotes(postID int) (int, int) {
+	var likes, dislikes int
+
+	DB.QueryRow(`
+		SELECT 
+			COALESCE(SUM(CASE WHEN value = 1 THEN 1 END),0),
+			COALESCE(SUM(CASE WHEN value = -1 THEN 1 END),0)
+		FROM likes
+		WHERE post_id=?`,
+		postID,
+	).Scan(&likes, &dislikes)
+
+	return likes, dislikes
+}
+
+// GetPostsByCategory returns all posts that belong to a given category ID.
+func GetPostsByCategory(categoryID int) ([]models.Post, error) {
+	var posts []models.Post
+	rows, err := DB.Query(`
+		SELECT posts.id, posts.user_id, users.username, posts.title, posts.content, posts.created_at
+		FROM posts
+		JOIN post_categories ON posts.id = post_categories.post_id
+		JOIN users ON posts.user_id = users.id
+		WHERE post_categories.category_id = ?
+		ORDER BY posts.created_at DESC
+	`, categoryID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var post models.Post
+		err := rows.Scan(
+			&post.ID,
+			&post.UserID,
+			&post.Username,
+			&post.Title,
+			&post.Content,
+			&post.CreatedAt,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("faild to scan post : %w", err)
+		}
+		posts = append(posts, post)
+	}
+
+	return posts, nil
+}
+
+// GetAllCategories returns all categories from the database.
+func GetAllCategories() ([]models.Category, error) {
+	rows, err := DB.Query(`SELECT id, name FROM categories ORDER BY name`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var cats []models.Category
+	for rows.Next() {
+		var c models.Category
+		if err := rows.Scan(&c.ID, &c.Name); err != nil {
+			return nil, err
+		}
+		cats = append(cats, c)
+	}
+	return cats, rows.Err()
+}
+
+// CategoryExists checks whether a category with the given ID exists.
+func CategoryExists(categoryID int) (bool, error) {
+	var id int
+	err := DB.QueryRow(`SELECT id FROM categories WHERE id = ?`, categoryID).Scan(&id)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }

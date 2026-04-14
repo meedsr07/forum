@@ -31,4 +31,5 @@ func InitializeDB() {
 	if err != nil {
 		log.Fatal("Error executing schema:", err)
 	}
+	SeedDB(DB)
 }
