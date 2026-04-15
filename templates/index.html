@@ -88,8 +88,8 @@
             <div class="categories">
                 {{range .Category}}                
                 <div class="category">
-                    <input type="checkbox" id="cat2" name=".ID" value="{{.Name}}">
-                    <label for="cat2">⚽ {{.Name}}</label>
+                    <input type="checkbox" id="{{.ID}}" name="{{.ID}}" value="{{.Name}}">
+                    <label for="{{.ID}}">{{.Name}}</label>
                 </div> 
                 {{end}}
             </div>

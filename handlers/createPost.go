@@ -25,7 +25,7 @@ func CreateNewPost(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
-	RowsCategorys, err := database.DB.Query("SELECT * FROM categories")
+	RowsCategorys, err := database.DB.Query("SELECT (id) FROM categories")
 	if err != nil {
 		ErrorHandler(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
@@ -47,8 +47,10 @@ func CreateNewPost(w http.ResponseWriter, r *http.Request) {
 	err = r.ParseForm()
 	if err != nil {
 		ErrorHandler(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+
 		return
 	}
+
 	title := r.FormValue("title")
 	content := r.FormValue("content")
 	lenghtCategores := 0
