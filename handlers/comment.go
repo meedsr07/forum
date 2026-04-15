@@ -18,7 +18,9 @@ func CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
 	content := r.FormValue("content")
 	postIDStr := r.FormValue("post_id")
 	postID, err := strconv.Atoi(postIDStr)
-
+	if len(content) > 100 {
+		ErrorHandler(w,http.StatusText(405) , 405)
+	}
 	userID, err := GetUserID(r)
 	if err != nil {
 		http.Redirect(w, r, "/login?next=/post/"+postIDStr, http.StatusSeeOther)
