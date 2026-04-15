@@ -81,7 +81,38 @@
             font-weight: 500;
             font-size: 0.875rem;
         }
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+}
 
+.category {
+    margin: 10px 0 ;
+
+}
+
+.category input {
+  display: none;
+}
+
+.category label {
+  padding: 8px 16px;
+  border: 2px solid #ddd;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.category input:checked + label {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
         .modal-btn.cancel {
             background: #f1f5f9;
             color: #475569;
