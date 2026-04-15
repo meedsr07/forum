@@ -25,30 +25,13 @@
                 <h3>📂 Categories</h3>
             </div>
             <ul class="categories-list">
+                {{range .Category}}
                 <li>
-                    <a href="#" data-cat="all" class="cat-link active" id="sidebarCatAll">
-                        <span class="cat-icon">🗂️</span>
-                        <span>All Topics</span>
+                    <a href="/?category={{.ID}}" class="cat-link">
+                        <span>{{.Name}}</span>
                     </a>
                 </li>
-                <li>
-                    <a href="#" data-cat="Technology" class="cat-link" id="sidebarCatTech">
-                        <span class="cat-icon">💻</span>
-                        <span>Technology</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" data-cat="General" class="cat-link" id="sidebarCatGeneral">
-                        <span class="cat-icon">💬</span>
-                        <span>General</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" data-cat="Help" class="cat-link" id="sidebarCatHelp">
-                        <span class="cat-icon">🆘</span>
-                        <span>Help & Support</span>
-                    </a>
-                </li>
+                {{end}}
             </ul>
         </div>
     </aside>
@@ -103,25 +86,12 @@
             <input type="text" name="title" placeholder="Post title" required >
             
             <div class="categories">
+                {{range .Category}}                
                 <div class="category">
-                    <input type="checkbox" id="cat1" name="category" value="Tech">
-                    <label for="cat1">💻 Tech</label>
-                </div>
-
-                <div class="category">
-                    <input type="checkbox" id="cat2" name="category" value="Sport">
-                    <label for="cat2">⚽ Sport</label>
-                </div>
-
-                <div class="category">
-                    <input type="checkbox" id="cat3" name="category" value="News">
-                    <label for="cat3">📰 News</label>
-                </div>
-
-                <div class="category">
-                    <input type="checkbox" id="cat4" name="category" value="Games">
-                    <label for="cat4">🎮 Games</label>
-                </div>
+                    <input type="checkbox" id="cat2" name=".ID" value="{{.Name}}">
+                    <label for="cat2">⚽ {{.Name}}</label>
+                </div> 
+                {{end}}
             </div>
 
 

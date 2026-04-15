@@ -2,10 +2,11 @@ package handlers
 
 import (
 	"bytes"
-	"forum/database"
-	"forum/models"
 	"net/http"
 	"strconv"
+
+	"forum/database"
+	"forum/models"
 )
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
@@ -33,14 +34,29 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 
 	comments, err := database.GetCommentsByPost(postID)
 	if err != nil {
+
 		ErrorHandler(w, http.StatusText(500), 500)
 		return
 	}
 
+	Likess, Dislikess := database.GetPostVotes(postID)
+
+	commentVotes := make(map[int]models.VoteCount)
+
+	for _, c := range comments {
+		likes, dislikes := database.GetCommentVotes(c.ID)
+		commentVotes[c.ID] = models.VoteCount{
+			Likes:    likes,
+			Dislikes: dislikes,
+		}
+	}
 	userID, sessionErr := GetUserID(r)
 	data := models.PostPageData{
-		Post:     post,
-		Comments: comments,
+		Post:         post,
+		Comments:     comments,
+		Likes:        Likess,
+		Dislikes:     Dislikess,
+		CommentVotes: commentVotes,
 	}
 	if sessionErr == nil {
 		var username string
@@ -53,7 +69,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 
 	var buff bytes.Buffer
 	if err := tmpl.ExecuteTemplate(&buff, "post.html", data); err != nil {
-		ErrorHandler(w , "intenal srever error" , 500)
+		ErrorHandler(w, "intenal srever error", 500)
 		return
 	}
 	w.Write(buff.Bytes())
