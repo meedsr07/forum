@@ -22,16 +22,27 @@ func generateSessionToken() string {
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session_token")
-
-	//  If we found a cookie AND it is not empty, the user is already logged in
-	if err == nil && cookie.Value != "" {
-
-		// Redirect the user to the Home page ("/")
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-
-		// STOP here! Do not run the rest of the code (Do not show the login page)
-		return
-	}
+	rows , err := database.DB.Query("SELECT session_token FROM user_sessions")
+	if err != nil {
+		log.Println("Error querying sessions:", err)
+	} else {
+		defer rows.Close()
+		for rows.Next() {
+			var token string
+			if err := rows.Scan(&token); err != nil {
+				log.Println("Error scanning session token:", err)
+			} else {
+				if cookie != nil && cookie.Value == token {
+					http.Redirect(w, r, "/", http.StatusSeeOther)
+					return
+				}
+			}
+		}
+		if err := rows.Err(); err != nil {
+			log.Println("Error iterating session tokens:", err)
+		}
+	}	
+	
 	// 1. If the user just wants to see the page (GET request)
 	if r.Method == http.MethodGet {
 		tmpl.ExecuteTemplate(w, "login.html", nil)

@@ -2,11 +2,13 @@ package handlers
 
 import (
 	"database/sql"
-	"forum/database"
 	"html/template"
 	"log"
 	"net/http"
 	"regexp"
+
+	"forum/database"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -20,17 +22,30 @@ var tmpl *template.Template
 func init() {
 	tmpl = template.Must(template.ParseGlob("templates/*.html"))
 }
+
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session_token")
 
-	//  If we found a cookie AND it is not empty, the user is already logged in
-	if err == nil && cookie.Value != "" {
-		
-		// Redirect the user to the Home page ("/")
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		
-		// STOP here! Do not run the rest of the code (Do not show the login page)
-		return 
+	//  If we found a cookie AND it is not empty, the user is already loggedin
+	rows, err := database.DB.Query("SELECT session_token FROM user_sessions")
+	if err != nil {
+		log.Println("Error querying sessions:", err)
+	} else {
+		defer rows.Close()
+		for rows.Next() {
+			var token string
+			if err := rows.Scan(&token); err != nil {
+				log.Println("Error scanning session token:", err)
+			} else {
+				if cookie != nil && cookie.Value == token {
+					http.Redirect(w, r, "/", http.StatusSeeOther)
+					return
+				}
+			}
+		}
+		if err := rows.Err(); err != nil {
+			log.Println("Error iterating session tokens:", err)
+		}
 	}
 	// 1. If GET request: Show the register page
 	if r.Method == http.MethodGet {

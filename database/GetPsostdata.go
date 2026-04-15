@@ -13,6 +13,8 @@ func Getallpost() ([]models.Post, error) {
     SELECT posts.id, posts.user_id, users.username, posts.title, posts.content, posts.created_at 
     FROM posts 
     JOIN users ON posts.user_id = users.id
+	ORDER BY posts.created_at DESC
+	
 `)
 	if err != nil {
 		return nil, err
