@@ -13,6 +13,10 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const (
+	SessionDuration = 24 * time.Hour
+)
+
 // This function creates a random secret code (like: "aB3dE5...")
 func generateSessionToken() string {
 	b := make([]byte, 32)
@@ -22,27 +26,22 @@ func generateSessionToken() string {
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session_token")
-	rows , err := database.DB.Query("SELECT session_token FROM user_sessions")
-	if err != nil {
-		log.Println("Error querying sessions:", err)
-	} else {
-		defer rows.Close()
-		for rows.Next() {
-			var token string
-			if err := rows.Scan(&token); err != nil {
-				log.Println("Error scanning session token:", err)
+
+	if err == nil && cookie != nil && cookie.Value != "" {
+		var dbToken string
+		var expiresAt time.Time
+		errDB := database.DB.QueryRow("SELECT session_token, expires_at FROM user_sessions WHERE session_token = ?", cookie.Value).Scan(&dbToken, &expiresAt)
+		// if we find cookie
+		if errDB == nil {
+			if time.Now().Before(expiresAt) {
+				http.Redirect(w, r, "/", http.StatusSeeOther)
+				return
 			} else {
-				if cookie != nil && cookie.Value == token {
-					http.Redirect(w, r, "/", http.StatusSeeOther)
-					return
-				}
+				database.DB.Exec("DELETE FROM user_sessions WHERE session_token = ?", cookie.Value)
 			}
 		}
-		if err := rows.Err(); err != nil {
-			log.Println("Error iterating session tokens:", err)
-		}
-	}	
-	
+	}
+
 	// 1. If the user just wants to see the page (GET request)
 	if r.Method == http.MethodGet {
 		tmpl.ExecuteTemplate(w, "login.html", nil)
@@ -60,7 +59,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 		// b. Check if this user exists in the database
 		err := database.DB.QueryRow("SELECT id, password FROM users WHERE email = ? OR username = ?", identifier, identifier).Scan(&dbID, &dbPasswordHash)
-
 		if err != nil {
 			// If user is not found, return an error
 			if err == sql.ErrNoRows {
@@ -94,9 +92,9 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		// d. Credentials are correct! Create a Session Token
 		sessionToken := generateSessionToken()
-
+		expirationTime := time.Now().Add(SessionDuration)
 		// e. Save the token in the 'user_sessions' table in our Database
-		_, err = database.DB.Exec("INSERT INTO user_sessions (user_id, session_token, expires_at) VALUES (?, ?, ?)", dbID, sessionToken, time.Now().Add(24*time.Hour))
+		_, err = database.DB.Exec("INSERT INTO user_sessions (user_id, session_token, expires_at) VALUES (?, ?, ?)", dbID, sessionToken, expirationTime)
 		if err != nil {
 			log.Println("Error saving session to DB:", err)
 			ErrorHandler(w, "Error creating session, try again later", http.StatusInternalServerError)
@@ -106,7 +104,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		cookie := http.Cookie{
 			Name:     "session_token",
 			Value:    sessionToken,
-			Expires:  time.Now().Add(24 * time.Hour),
+			Expires:  expirationTime,
 			HttpOnly: true,
 			Path:     "/",
 		}

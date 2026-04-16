@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"time"
 
 	"forum/database"
 
@@ -13,8 +14,8 @@ import (
 )
 
 var (
-usernameRegex = regexp.MustCompile(`^[a-zA-Z0-9_]{4,20}$`)
-emailRegex = regexp.MustCompile(`^[^@\s]+@[^@\s]+\.[^@\s]+$`)
+	usernameRegex = regexp.MustCompile(`^[a-zA-Z0-9_]{4,20}$`)
+	emailRegex    = regexp.MustCompile(`^[^@\s]+@[^@\s]+\.[^@\s]+$`)
 )
 
 var tmpl *template.Template
@@ -26,18 +27,21 @@ func init() {
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session_token")
 
-	//  If we found a cookie AND it is not empty, the user is already loggedin
 	if err == nil && cookie != nil && cookie.Value != "" {
-        var dbToken string
+		var dbToken string
+		var expiresAt time.Time
+		errDB := database.DB.QueryRow("SELECT session_token, expires_at FROM user_sessions WHERE session_token = ?", cookie.Value).Scan(&dbToken, &expiresAt)
 
-		errDB := database.DB.QueryRow("SELECT session_token FROM user_sessions WHERE session_token = ?", cookie.Value).Scan(&dbToken)
-	
 		if errDB == nil {
-            http.Redirect(w, r, "/", http.StatusSeeOther)
-            return
-        }
-    }
-		// 1. If GET request: Show the register page
+			if time.Now().Before(expiresAt) {
+				http.Redirect(w, r, "/", http.StatusSeeOther)
+				return
+			} else {
+				database.DB.Exec("DELETE FROM user_sessions WHERE session_token = ?", cookie.Value)
+			}
+		}
+	}
+	// 1. If GET request: Show the register page
 	if r.Method == http.MethodGet {
 		w.WriteHeader(http.StatusOK)
 		tmpl.ExecuteTemplate(w, "register.html", nil)
