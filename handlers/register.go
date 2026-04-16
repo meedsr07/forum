@@ -13,8 +13,8 @@ import (
 )
 
 var (
-	usernameRegex = regexp.MustCompile(`^[a-z]+( [a-z0-9]+)?$`)
-	emailRegex    = regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
+usernameRegex = regexp.MustCompile(`^[a-zA-Z0-9_]{4,20}$`)
+emailRegex = regexp.MustCompile(`^[^@\s]+@[^@\s]+\.[^@\s]+$`)
 )
 
 var tmpl *template.Template
@@ -27,27 +27,17 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session_token")
 
 	//  If we found a cookie AND it is not empty, the user is already loggedin
-	rows, err := database.DB.Query("SELECT session_token FROM user_sessions")
-	if err != nil {
-		log.Println("Error querying sessions:", err)
-	} else {
-		defer rows.Close()
-		for rows.Next() {
-			var token string
-			if err := rows.Scan(&token); err != nil {
-				log.Println("Error scanning session token:", err)
-			} else {
-				if cookie != nil && cookie.Value == token {
-					http.Redirect(w, r, "/", http.StatusSeeOther)
-					return
-				}
-			}
-		}
-		if err := rows.Err(); err != nil {
-			log.Println("Error iterating session tokens:", err)
-		}
-	}
-	// 1. If GET request: Show the register page
+	if err == nil && cookie != nil && cookie.Value != "" {
+        var dbToken string
+
+		errDB := database.DB.QueryRow("SELECT session_token FROM user_sessions WHERE session_token = ?", cookie.Value).Scan(&dbToken)
+	
+		if errDB == nil {
+            http.Redirect(w, r, "/", http.StatusSeeOther)
+            return
+        }
+    }
+		// 1. If GET request: Show the register page
 	if r.Method == http.MethodGet {
 		w.WriteHeader(http.StatusOK)
 		tmpl.ExecuteTemplate(w, "register.html", nil)
@@ -67,14 +57,6 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		///////Email & Username check\\\\\\
 		username := r.FormValue("username")
 		email := r.FormValue("email")
-
-		if len(username) < 4 || len(username) > 20 {
-			w.WriteHeader(http.StatusBadRequest)
-			tmpl.ExecuteTemplate(w, "register.html", map[string]interface{}{
-				"Error": "Username length must be between 4 and 20 characters.",
-			})
-			return
-		}
 
 		if !usernameRegex.MatchString(username) {
 			w.WriteHeader(http.StatusBadRequest)
