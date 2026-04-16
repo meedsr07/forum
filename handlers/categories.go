@@ -28,7 +28,7 @@ func FilterPostsHandler(w http.ResponseWriter, r *http.Request ,IdCategory strin
 
 	posts, err := database.GetPostsByCategory(categoryID)
 	if err != nil {
-		ErrorHandler(w, http.StatusText(500), http.StatusInternalServerError)
+		ErrorHandler(w, "Invalid category", http.StatusBadRequest)
 		return
 	}
 

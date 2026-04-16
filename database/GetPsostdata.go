@@ -1,6 +1,7 @@
 package database
 
 import (
+	"database/sql"
 	"fmt"
 
 	"forum/models"
@@ -145,6 +146,16 @@ func GetPostVotes(postID int) (int, int) {
 // GetPostsByCategory returns all posts that belong to a given category ID.
 func GetPostsByCategory(categoryID int) ([]models.Post, error) {
 	var posts []models.Post
+	var exists int
+
+	err := DB.QueryRow("SELECT 1 FROM categories WHERE id = ?", categoryID).Scan(&exists)
+
+	if err == sql.ErrNoRows {
+		return nil , fmt.Errorf("category not found")
+	}
+	if err != nil {
+		return nil , err
+	}
 	rows, err := DB.Query(`
 		SELECT posts.id, posts.user_id, users.username, posts.title, posts.content, posts.created_at
 		FROM posts
