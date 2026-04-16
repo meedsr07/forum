@@ -18,7 +18,7 @@ func CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
 	content := r.FormValue("content")
 	postIDStr := r.FormValue("post_id")
 	postID, err := strconv.Atoi(postIDStr)
-	if len(content) > 100 {
+	if len(content) > 2048 {
 		ErrorHandler(w,http.StatusText(405) , 405)
 	}
 	userID, err := GetUserID(r)

@@ -44,6 +44,7 @@
 }
 
 .post-detail-title {
+    word-break: break-word;
     font-size: 1.5rem;
     font-weight: 700;
     color: #0f172a;
@@ -52,6 +53,7 @@
 }
 
 .post-detail-content {
+    word-break: break-word;
     font-size: 0.9rem;
     color: #475569;
     line-height: 1.75;
@@ -74,6 +76,7 @@
     border: 1px solid #eef2ff;
     border-radius: 2rem;
     padding: 0.35rem 0.9rem;
+    height: 40px;
 }
 
 .vote-btn-detail {
@@ -173,6 +176,8 @@
     font-size: 0.85rem;
     color: #475569;
     line-height: 1.6;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .no-comments {

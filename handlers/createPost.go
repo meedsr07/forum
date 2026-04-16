@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -65,6 +66,7 @@ func CreateNewPost(w http.ResponseWriter, r *http.Request) {
 	title = strings.TrimSpace(title)
 	content = strings.TrimSpace(content)
 	category = strings.TrimSpace(category)
+	fmt.Println("values", title, content, content)
 	if title == "" || content == "" || lenghtCategores == 0 || len(title) > 200 || len(content) > 4096 {
 		ErrorHandler(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return

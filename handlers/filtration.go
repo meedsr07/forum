@@ -33,12 +33,19 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		ErrorHandler(w, http.StatusText(404), 404)
 		return
 	}
+	if r.Method != http.MethodGet {
+		ErrorHandler(w, http.StatusText(404), 404)
+		return
+	}
+	// methode not post return
+
+	//-----------------------
 	userID, sessionErr := GetUserID(r)
 	// get the filter query parameter from the URL
 	// ------------------------- walid ---------------------------
 	category := r.URL.Query().Get("category")
 	if category != "" {
-		FilterPostsHandler(w , r, category)
+		FilterPostsHandler(w, r, category)
 		return
 	}
 	// ------------------------- end walid ---------------------------
