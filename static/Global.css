@@ -1,93 +1,93 @@
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-            color: #0f172a;
-            line-height: 1.5;
-        }
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f8fafc;
+    color: #0f172a;
+    line-height: 1.5;
+}
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(4px);
-        }
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
 
-        .modal:target {
-            display: flex;
-        }
+.modal:target {
+    display: flex;
+}
 
-        .modal-card {
-            background: white;
-            border-radius: 1.5rem;
-            max-width: 450px;
-            width: 90%;
-            padding: 2rem;
-            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.2);
-        }
+.modal-card {
+    background: white;
+    border-radius: 1.5rem;
+    max-width: 450px;
+    width: 90%;
+    padding: 2rem;
+    box-shadow: 0 20px 35px -10px rgba(0,0,0,0.2);
+}
 
-        .modal-card h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1.25rem;
-            color: #0f172a;
-        }
+.modal-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    color: #0f172a;
+}
 
-        .modal-card input,
-        .modal-card textarea,
-        .modal-card select {
-            width: 100%;
-            padding: 0.75rem;
-            margin: 0.5rem 0;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.75rem;
-            font-family: inherit;
-            font-size: 0.875rem;
-            transition: all 0.2s;
-        }
+.modal-card input,
+.modal-card textarea,
+.modal-card select {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    font-family: inherit;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
 
-        .modal-card input:focus,
-        .modal-card textarea:focus,
-        .modal-card select:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 2px rgba(37,99,235,0.1);
-        }
+.modal-card input:focus,
+.modal-card textarea:focus,
+.modal-card select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.1);
+}
 
-        .modal-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
-        }
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
 
-        .modal-btn {
-            padding: 0.5rem 1rem;
-            border-radius: 0.75rem;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.875rem;
-        }
+.modal-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+}
 .categories {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-  margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
 }
 
 .category {
@@ -96,64 +96,64 @@
 }
 
 .category input {
-  display: none;
+    display: none;
 }
 
 .category label {
-  padding: 8px 16px;
-  border: 2px solid #ddd;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-  font-size: 14px;
+    padding: 8px 16px;
+    border: 2px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 14px;
 }
 
 .category input:checked + label {
-  background: #2563eb;
-  color: white;
-  border-color: #2563eb;
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
 }
-        .modal-btn.cancel {
-            background: #f1f5f9;
-            color: #475569;
-        }
+.modal-btn.cancel {
+    background: #f1f5f9;
+    color: #475569;
+}
 
-        .modal-btn.cancel:hover {
-            background: #e2e8f0;
-        }
+.modal-btn.cancel:hover {
+    background: #e2e8f0;
+}
 
-        .modal-btn.submit {
-            background: #2563eb;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
+.modal-btn.submit {
+    background: #2563eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
 
-        .modal-btn.submit:hover {
-            background: #1d4ed8;
-        }
+.modal-btn.submit:hover {
+    background: #1d4ed8;
+}
 
-        .error-msg {
-            color: #dc2626;
-            font-size: 0.75rem;
-            margin-top: 0.25rem;
-        }
+.error-msg {
+    color: #dc2626;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
 
-       
-        @media (max-width: 768px) {
-            .forum-layout {
-                flex-direction: column;
-                padding: 1rem;
-            }
-            .sidebar {
-                width: 100%;
-                position: static;
-            }
-            .filter-bar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .navbar {
-                padding: 0.75rem 1rem;
-            }
-        }
+
+@media (max-width: 768px) {
+    .forum-layout {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    .sidebar {
+        width: 100%;
+        position: static;
+    }
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .navbar {
+        padding: 0.75rem 1rem;
+    }
+}

@@ -1,12 +1,12 @@
  .forum-layout {
-            display: flex;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-            gap: 2rem;
-        }
-        
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 2rem;
+}
+
  .main-content {
-            flex: 1;
-            min-width: 0;
-        }
+    flex: 1;
+    min-width: 0;
+}
