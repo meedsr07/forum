@@ -34,7 +34,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method != http.MethodGet {
-		ErrorHandler(w, http.StatusText(400), 400)
+		ErrorHandler(w, http.StatusText(405), 405)
 		return
 	}
 	// methode not post return

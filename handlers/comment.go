@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -11,28 +10,38 @@ import (
 
 func CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		fmt.Println("1")
 		ErrorHandler(w, http.StatusText(405), 405)
 		return
 	}
 
 	r.ParseForm()
-	content := r.FormValue("content")
+	content := strings.TrimSpace(r.FormValue("content"))
 	postIDStr := r.FormValue("post_id")
+
 	postID, err := strconv.Atoi(postIDStr)
-	if len(content) > 2048 {
+	if err != nil {
 		ErrorHandler(w, http.StatusText(400), 400)
 		return
 	}
+
 	userID, err := GetUserID(r)
 	if err != nil {
 		http.Redirect(w, r, "/login?next=/post/"+postIDStr, http.StatusSeeOther)
 		return
 	}
 
-	if err != nil || strings.TrimSpace(content) == "" {
-		ErrorHandler(w, http.StatusText(400), 400)
+	if content == "" {
+		http.Redirect(w, r, "/post/"+postIDStr+"?error=Comment cannot be empty.", http.StatusSeeOther)
 		return
+	}
+
+	if len(content) > 2048 {
+		http.Redirect(w, r, "/post/"+postIDStr+"?error=Comment is too long (max 2048 characters).", http.StatusSeeOther)
+		return
+	}
+
+	for strings.Contains(content, "\r\n\r\n") {
+		content = strings.ReplaceAll(content, "\r\n\r\n", "\r\n")
 	}
 
 	err = database.CreateComment(postID, userID, content)
@@ -40,6 +49,6 @@ func CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
 		ErrorHandler(w, http.StatusText(500), 500)
 		return
 	}
-	// Redirect the user back to the post page
+
 	http.Redirect(w, r, "/post/"+postIDStr, http.StatusSeeOther)
 }

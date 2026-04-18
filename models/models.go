@@ -72,4 +72,5 @@ type PostPageData struct {
 	Likes        int
 	Dislikes     int
 	CommentVotes map[int]VoteCount
+	CommentError string
 }

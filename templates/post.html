@@ -29,7 +29,7 @@
                 </div>
             </div>
             <h1 class="post-detail-title">{{.Post.Title}}</h1>
-            <p class="post-detail-content">{{.Post.Content}}</p>
+            <p class="post-detail-content" style="white-space: pre-wrap;">{{.Post.Content}}</p>
 
             <div class="post-detail-footer">
                 <div class="vote-group">
@@ -59,7 +59,7 @@
                                 <span class="comment-username">@{{.Username}}</span>
                                 <span class="comment-date">{{.CreatedAt.Format "Jan 2, 2006"}}</span>
                             </div>
-                            <p class="comment-text">{{.Content}}</p>
+                            <p class="comment-text" style="white-space: pre-wrap;">{{.Content}}</p>
                         </div>
                         <div class="vote-group">
 
@@ -83,6 +83,10 @@
                     <p class="no-comments">No comments yet. Be the first!</p>
                 {{end}}
 
+                {{if .CommentError}}
+                    <p class="error-banner">{{.CommentError}}</p>
+                {{end}}
+                
                 <div class="add-comment">
                     <form action="/comment/create" method="post">
                         <input type="hidden" name="post_id" value="{{.Post.ID}}">

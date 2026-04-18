@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	
 	"net/http"
 	"strconv"
 	"strings"
@@ -11,7 +10,7 @@ import (
 
 func CreateNewPost(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		ErrorHandler(w, http.StatusText(404), 404)
+		ErrorHandler(w, http.StatusText(405), 405)
 		return
 	}
 	cookie, err := r.Cookie("session_token")
@@ -28,7 +27,7 @@ func CreateNewPost(w http.ResponseWriter, r *http.Request) {
 	}
 	RowsCategorys, err := database.DB.Query("SELECT (id) FROM categories")
 	if err != nil {
-		ErrorHandler(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		ErrorHandler(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 	defer RowsCategorys.Close()
@@ -38,7 +37,7 @@ func CreateNewPost(w http.ResponseWriter, r *http.Request) {
 		var id int
 		err = RowsCategorys.Scan(&id)
 		if err != nil {
-			ErrorHandler(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			ErrorHandler(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}
 
@@ -70,7 +69,6 @@ func CreateNewPost(w http.ResponseWriter, r *http.Request) {
 		ErrorHandler(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
-
 	PosT, err := database.DB.Exec(
 		`INSERT INTO posts (user_id, title, content)
 	 VALUES (?, ?, ?)`,

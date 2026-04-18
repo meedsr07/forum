@@ -11,7 +11,7 @@ import (
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		ErrorHandler(w, http.StatusText(404), 404)
+		ErrorHandler(w, http.StatusText(405), 405)
 		return
 	}
 	path := r.URL.Path
@@ -34,7 +34,6 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 
 	comments, err := database.GetCommentsByPost(postID)
 	if err != nil {
-
 		ErrorHandler(w, http.StatusText(500), 500)
 		return
 	}
@@ -66,7 +65,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 			data.Username = username
 		}
 	}
-
+	data.CommentError = r.URL.Query().Get("error")
 	var buff bytes.Buffer
 	if err := tmpl.ExecuteTemplate(&buff, "post.html", data); err != nil {
 		ErrorHandler(w, "intenal srever error", 500)

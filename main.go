@@ -26,8 +26,8 @@ func main() {
 
 
 	http.HandleFunc("/static/", handlers.StaticHandlers)
-	fmt.Println("server is start in http://localhost:8088")
-	err := http.ListenAndServe(":8088", nil)
+	fmt.Println("server is start in http://localhost:8089")
+	err := http.ListenAndServe(":8089", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
