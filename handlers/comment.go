@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -10,6 +11,7 @@ import (
 
 func CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
+		fmt.Println("1")
 		ErrorHandler(w, http.StatusText(405), 405)
 		return
 	}
@@ -19,18 +21,19 @@ func CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
 	postIDStr := r.FormValue("post_id")
 	postID, err := strconv.Atoi(postIDStr)
 	if len(content) > 2048 {
-		ErrorHandler(w,http.StatusText(405) , 405)
+		ErrorHandler(w, http.StatusText(400), 400)
+		return
 	}
 	userID, err := GetUserID(r)
 	if err != nil {
 		http.Redirect(w, r, "/login?next=/post/"+postIDStr, http.StatusSeeOther)
 		return
 	}
-	
+
 	if err != nil || strings.TrimSpace(content) == "" {
 		ErrorHandler(w, http.StatusText(400), 400)
 		return
-	}	
+	}
 
 	err = database.CreateComment(postID, userID, content)
 	if err != nil {
