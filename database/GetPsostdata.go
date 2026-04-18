@@ -9,7 +9,7 @@ import (
 
 func Getallpost() ([]models.Post, error) {
 	var AllPost []models.Post
-	// asking the database to get data from the posts table
+	// asking the database to get data from the posts table and username
 	rows, err := DB.Query(`
     SELECT posts.id, posts.user_id, users.username, posts.title, posts.content, posts.created_at 
     FROM posts 
@@ -37,7 +37,7 @@ func Getallpost() ([]models.Post, error) {
 
 func GetMyPosts(userID int) ([]models.Post, error) {
 	var posts []models.Post
-
+	// Select all posts from the database that belong to a specific userID
 	rows, err := DB.Query(`
 		SELECT posts.id, posts.user_id, posts.title, posts.content, posts.created_at, users.username
 		FROM posts
@@ -52,14 +52,8 @@ func GetMyPosts(userID int) ([]models.Post, error) {
 
 	for rows.Next() {
 		var post models.Post
-		err := rows.Scan(
-			&post.ID,
-			&post.UserID,
-			&post.Title,
-			&post.Content,
-			&post.CreatedAt,
-			&post.Username,
-		)
+		err := rows.Scan(&post.ID,&post.UserID,&post.Title,&post.Content,&post.CreatedAt,&post.Username)
+		
 		if err != nil {
 			return nil, err
 		}
@@ -108,14 +102,8 @@ func GetLikedPosts(userID int) ([]models.Post, error) {
 
 	for rows.Next() {
 		var post models.Post
-		err := rows.Scan(
-			&post.ID,
-			&post.UserID,
-			&post.Title,
-			&post.Content,
-			&post.CreatedAt,
-			&post.Username,
-		)
+		err := rows.Scan(&post.ID,&post.UserID,&post.Title,&post.Content,&post.CreatedAt,&post.Username)
+	
 		if err != nil {
 			return nil, err
 		}
