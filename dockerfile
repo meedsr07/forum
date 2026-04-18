@@ -1,4 +1,4 @@
-FROM golang:1.22.3-alpine
+FROM golang:1.25.0
 
 # Metadata
 LABEL source="https://github.com/meedsr07/forum.git"
@@ -15,7 +15,7 @@ WORKDIR /forum
 COPY . . 
 
 #compile go code
-RUN go build -o app
+RUN go build -o forum
 
 #Expose web server port
 EXPOSE 8088
