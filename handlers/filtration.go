@@ -34,7 +34,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method != http.MethodGet {
-		ErrorHandler(w, http.StatusText(404), 404)
+		ErrorHandler(w, http.StatusText(400), 400)
 		return
 	}
 	// methode not post return
@@ -63,7 +63,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		posts, err = database.GetMyPosts(userID)
 		if err != nil {
-			ErrorHandler(w, "internal server error 1", 500)
+			ErrorHandler(w, http.StatusText(500), 500)
 			return
 		}
 
